@@ -2,7 +2,7 @@
 folder=/tmp/$USER
 export PGDATA=$folder/myDB/data
 export PGSOCKETS=$folder/myDB/sockets
-export DB_NAME="CS166_ONLINE_MESSAGING_SYSTEM_DB"
+export DB_NAME="${USER}_DB"
 
 echo $folder
 
