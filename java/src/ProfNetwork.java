@@ -40,7 +40,7 @@ public class ProfNetwork {
                                 new InputStreamReader(System.in));
 
    /**
-    * Creates a new instance of Messenger
+    * Creates a new instance of ProfNetwork
     *
     * @param hostname the MySQL or PostgreSQL server hostname
     * @param database the name of the database
@@ -230,22 +230,22 @@ public class ProfNetwork {
          System.err.println (
             "Usage: " +
             "java [-classpath <classpath>] " +
-            Messenger.class.getName () +
+            ProfNetwork.class.getName () +
             " <dbname> <port> <user>");
          return;
       }//end if
 
       Greeting();
-      Messenger esql = null;
+      ProfNetwork esql = null;
       try{
          // use postgres JDBC driver.
          Class.forName ("org.postgresql.Driver").newInstance ();
-         // instantiate the Messenger object and creates a physical
+         // instantiate the ProfNetwork object and creates a physical
          // connection.
          String dbname = args[0];
          String dbport = args[1];
          String user = args[2];
-         esql = new Messenger (dbname, dbport, user, "");
+         esql = new ProfNetwork (dbname, dbport, user, "");
 
          boolean keepon = true;
          while(keepon) {
@@ -331,7 +331,7 @@ public class ProfNetwork {
     * Creates a new user with privided login, passowrd and phoneNum
     * An empty block and contact list would be generated and associated with a user
     **/
-   public static void CreateUser(Messenger esql){
+   public static void CreateUser(ProfNetwork esql){
       try{
          System.out.print("\tEnter user login: ");
          String login = in.readLine();
@@ -354,7 +354,7 @@ public class ProfNetwork {
     * Check log in credentials for an existing user
     * @return User login or null is the user does not exist
     **/
-   public static String LogIn(Messenger esql){
+   public static String LogIn(ProfNetwork esql){
       try{
          System.out.print("\tEnter user login: ");
          String login = in.readLine();
@@ -373,5 +373,65 @@ public class ProfNetwork {
    }//end
 
 // Rest of the functions definition go in here
+
+ /*
+    * Query the list of friends for the given user
+    * @return the list, or null if there are no friends
+    **/
+public static String FriendList(ProfNetwork esql){
+   try{
+      // TODO: IMPLEMENT ME
+      return "";
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+ /*
+    * 
+    * TODO: WRITE DESCRIPTION
+    **/
+public static String UpdateProfile(ProfNetwork esql){
+   try{
+      // TODO: IMPLEMENT ME
+      return "";
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+/*
+    * 
+    * TODO: WRITE DESCRIPTION
+    **/
+public static String NewMessage(ProfNetwork esql){
+   try{
+      // TODO: IMPLEMENT ME
+      return "";
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+/*
+    * 
+    * TODO: WRITE DESCRIPTION
+    **/
+public static String SendRequest(ProfNetwork esql){
+   try{
+      // TODO: IMPLEMENT ME
+      return "";
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
 
 }//end ProfNetwork
