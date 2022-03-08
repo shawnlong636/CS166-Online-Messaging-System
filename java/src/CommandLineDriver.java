@@ -45,11 +45,11 @@ public class CommandLineDriver {
             String user = "";
             switch (readChoice()){
                case 1: CreateUser(esql); break;
-               case 2: user = LogIn(esql); break;
+               case 2: currentUser = LogIn(esql); break;
                case 9: keepon = false; break;
                default : System.out.println("Unrecognized choice!"); break;
             }//end switch
-            if (user != "") {
+            if (currentUser != "") {
               boolean usermenu = true;
               while(usermenu) {
                 System.out.println("MAIN MENU");
@@ -61,10 +61,10 @@ public class CommandLineDriver {
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
-                   case 1: FriendList(esql, user); break;
-                   case 2: ChangePassword(esql, user); break;
-                   case 3: NewMessage(esql, user); break;
-                   case 4: SendRequest(esql, user); break;
+                   case 1: FriendList(esql, currentUser); break;
+                   case 2: ChangePassword(esql, currentUser); break;
+                   case 3: NewMessage(esql, currentUser); break;
+                   case 4: SendRequest(esql, currentUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -142,7 +142,7 @@ public class CommandLineDriver {
          System.out.println("DUMMY LOGIN SUCCEEDED");
          return login;
       } else {
-         System.out.println("Login failed.")
+         System.out.println("Login failed.");
          return "";
       }
       
