@@ -219,7 +219,7 @@ public class ProfNetwork {
     * Creates a new user with provided login, passowrd and email
     * An empty block and contact list would be generated and associated with a user
     **/
-   public static boolean CreateUser(String login, String password, String email){
+   public boolean CreateUser(String login, String password, String email){
       try{
 
          //Creating empty contact\block lists for a user
@@ -241,7 +241,7 @@ public class ProfNetwork {
     * @return true if login succeeded else false if 
     * the user/password doesn't exist in the database
     **/
-   public static boolean LogIn(String login, String password){
+   public boolean LogIn(String login, String password){
       try{
          String query = String.format("SELECT * FROM USR WHERE userId = '%s' AND password = '%s'", login, password);
          int userNum = esql.executeQuery(query);
@@ -262,7 +262,7 @@ public class ProfNetwork {
     * Query the list of friends for the given user
     * @return the list, or null if there are no friends
     **/
-public static List<String> FriendList(String user){
+public List<String> FriendList(String user){
    try{
       // TODO: IMPLEMENT ME
 
@@ -280,7 +280,7 @@ public static List<String> FriendList(String user){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static boolean ChangePassword(String user, String password){
+public boolean ChangePassword(String user, String password){
    try{
       // TODO: IMPLEMENT ME
       return "";
@@ -295,7 +295,7 @@ public static boolean ChangePassword(String user, String password){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static boolean NewMessage(String user, String recipient, String message){
+public boolean NewMessage(String user, String recipient, String message){
    try{
       // TODO: IMPLEMENT ME
 
@@ -311,7 +311,7 @@ public static boolean NewMessage(String user, String recipient, String message){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static boolean SendRequest(String user, String requestedUser){
+public boolean SendRequest(String user, String requestedUser){
    try{
       // TODO: IMPLEMENT ME
       return true;
