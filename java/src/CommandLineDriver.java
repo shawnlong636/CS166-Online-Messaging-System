@@ -1,16 +1,11 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CommandLineDriver {
 
-   // handling the keyboard inputs through a BufferedReader
-   // This variable can be global for convenience.
-   static BufferedReader in = new BufferedReader(
-                                new InputStreamReader(System.in));
+   private static Scanner in = new Scanner(System.in);
     
     /**
     * The main execution method
@@ -90,6 +85,8 @@ public class CommandLineDriver {
             // ignored.
          }//end try
       }//end try
+
+      in.close();
    }//end main
 
    public static void Greeting(){
@@ -104,12 +101,13 @@ public class CommandLineDriver {
     * @int
     **/
    public static int readChoice() {
+
       int input;
       // returns only if a correct value is given.
       do {
          System.out.print("Please make your choice: ");
          try { // read the integer, parse it and break.
-            input = Integer.parseInt(in.readLine());
+            input = Integer.parseInt(in.nextInt());
             break;
          }catch (Exception e) {
             System.out.println("Your input is invalid!");
@@ -122,11 +120,11 @@ public class CommandLineDriver {
    public static void CreateUser(ProfNetwork esql) {
 
     System.out.print("\tEnter user login: ");
-    String login = in.readLine();
+    String login = in.nextLine();
     System.out.print("\tEnter user password: ");
-    String password = in.readLine();
+    String password = in.nextLine();
     System.out.print("\tEnter user email: ");
-    String email = in.readLine();
+    String email = in.nextLine();
 
       esql.CreateUser(login, password, email);
     
@@ -134,9 +132,9 @@ public class CommandLineDriver {
 
     public static boolean LogIn(ProfNetwork esql) {
         System.out.print("\tEnter user login: ");
-        String login = in.readLine();
+        String login = in.nextLine();
         System.out.print("\tEnter user password: ");
-        String password = in.readLine();
+        String password = in.nextLine();
 
       //   return this.esql.LogIn(login, password)
       System.out.println("DUMMY LOGIN SUCCEEDED");
