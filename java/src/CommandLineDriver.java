@@ -120,11 +120,11 @@ public class CommandLineDriver {
    public static void CreateUser(ProfNetwork esql) {
 
     System.out.print("\tEnter user login: ");
-    String login = in.nextLine();
+    String login = in.next();
     System.out.print("\tEnter user password: ");
-    String password = in.nextLine();
+    String password = in.next();
     System.out.print("\tEnter user email: ");
-    String email = in.nextLine();
+    String email = in.nexte();
 
       esql.CreateUser(login, password, email);
     
@@ -132,12 +132,13 @@ public class CommandLineDriver {
 
     public static boolean LogIn(ProfNetwork esql) {
         System.out.print("\tEnter user login: ");
-        String login = in.nextLine();
+        String login = in.next();
         System.out.print("\tEnter user password: ");
-        String password = in.nextLine();
+        String password = in.next();
 
-      //   return this.esql.LogIn(login, password)
+      this.esql.LogIn(login, password);
       System.out.println("DUMMY LOGIN SUCCEEDED");
+
       return true;
     }
 
