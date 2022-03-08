@@ -1,4 +1,4 @@
-public class CommandLineDriver.java {
+public class CommandLineDriver {
 
     private ProfNetwork esql = null;
     
