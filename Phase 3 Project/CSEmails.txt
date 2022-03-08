@@ -1,0 +1,7 @@
+Chair of Department,chairdepartmentemail@gmail.com,
+Jamal,scienceteacher1email@gmail.com,
+CScience Teacher 2,scienceteacher2email@gmail.com,
+CScience Teacher 3,scienceteacher3email@gmail.com,
+Dean 1,dean1email@gmail.com,
+Dean 2,dean2email@gmail.com,
+Dean 3,dean3email@gmail.com,
