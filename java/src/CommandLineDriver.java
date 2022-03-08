@@ -1,6 +1,4 @@
 public class CommandLineDriver {
-
-    private ProfNetwork esql = null;
     
     /**
     * The main execution method
@@ -18,7 +16,7 @@ public class CommandLineDriver {
       }//end if
 
       Greeting();
-    //   ProfNetwork esql = null;
+      ProfNetwork esql = null;
       try{
          // use postgres JDBC driver.
          Class.forName ("org.postgresql.Driver").newInstance ();
@@ -27,7 +25,7 @@ public class CommandLineDriver {
          String dbname = args[0];
          String dbport = args[1];
          String user = args[2];
-         this.esql = new ProfNetwork (dbname, dbport, user, "");
+         esql = new ProfNetwork (dbname, dbport, user, "");
 
          boolean keepon = true;
          while(keepon) {
@@ -38,9 +36,9 @@ public class CommandLineDriver {
             System.out.println("2. Log in");
             System.out.println("9. < EXIT");
             boolean authorisedUser = false;
-            switch (readChoice()){
-               case 1: CreateUser(); break;
-               case 2: authorisedUser = LogIn(); break;
+            switch (readChoice(esql)){
+               case 1: CreateUser(esql); break;
+               case 2: authorisedUser = LogIn(esql); break;
                case 9: keepon = false; break;
                default : System.out.println("Unrecognized choice!"); break;
             }//end switch
@@ -56,10 +54,10 @@ public class CommandLineDriver {
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
-                   case 1: FriendList(); break;
-                   case 2: ChangePassword(); break;
-                   case 3: NewMessage(); break;
-                   case 4: SendRequest(); break;
+                   case 1: FriendList(esql); break;
+                   case 2: ChangePassword(esql); break;
+                   case 3: NewMessage(esql); break;
+                   case 4: SendRequest(esql); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -109,7 +107,7 @@ public class CommandLineDriver {
       return input;
    }//end readChoice
 
-   public static void CreateUser() {
+   public static void CreateUser(ProfNetwork esql) {
 
     System.out.print("\tEnter user login: ");
     String login = in.readLine();
@@ -118,11 +116,11 @@ public class CommandLineDriver {
     System.out.print("\tEnter user email: ");
     String email = in.readLine();
 
-    return this.esql.createUser(login, password, email);
+    return esql.createUser(login, password, email);
     
     }
 
-    public static boolean LogIn() {
+    public static boolean LogIn(ProfNetwork esql) {
         System.out.print("\tEnter user login: ");
         String login = in.readLine();
         System.out.print("\tEnter user password: ");
@@ -133,24 +131,24 @@ public class CommandLineDriver {
       return true;
     }
 
-    public static void FriendList() {
+    public static void FriendList(ProfNetwork esql) {
         // TODO: IMPLEMENT ME
         for (int i = 0; i < 3; i++) {
            System.out.printf("Fake Friend %d%n", i);
         }
     }
 
-    public static void ChangePassword() {
+    public static void ChangePassword(ProfNetwork esql) {
         // TODO: IMPLEMENT ME
         System.out.println("DUMMY PASSWORD CHANGED");
     }
 
-    public static void NewMessage() {
+    public static void NewMessage(ProfNetwork esql) {
         // TODO: IMPLEMENT ME
         System.out.println("SENDING FAKE MESSAGE");
     }
 
-    public static void SendRequest() {
+    public static void SendRequest(ProfNetwork esql) {
         // TODO: IMPLEMENT ME
         System.out.println("SENDING FAKE FRIEND REQUEST");
     }
