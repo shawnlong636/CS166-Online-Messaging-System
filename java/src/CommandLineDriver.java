@@ -1,4 +1,9 @@
 public class CommandLineDriver {
+
+   // handling the keyboard inputs through a BufferedReader
+   // This variable can be global for convenience.
+   static BufferedReader in = new BufferedReader(
+                                new InputStreamReader(System.in));
     
     /**
     * The main execution method

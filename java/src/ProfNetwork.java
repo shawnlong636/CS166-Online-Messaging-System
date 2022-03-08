@@ -34,11 +34,6 @@ public class ProfNetwork {
    // reference to physical database connection.
    private Connection _connection = null;
 
-   // handling the keyboard inputs through a BufferedReader
-   // This variable can be global for convenience.
-   static BufferedReader in = new BufferedReader(
-                                new InputStreamReader(System.in));
-
    /**
     * Creates a new instance of ProfNetwork
     *
