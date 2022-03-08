@@ -283,7 +283,7 @@ public List<String> FriendList(String user){
 public boolean ChangePassword(String user, String password){
    try{
       // TODO: IMPLEMENT ME
-      return "";
+      return true;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
