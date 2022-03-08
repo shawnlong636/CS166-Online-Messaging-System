@@ -128,23 +128,31 @@ public class CommandLineDriver.java {
         System.out.print("\tEnter user password: ");
         String password = in.readLine();
 
-        return this.esql.LogIn(login, password)
+      //   return this.esql.LogIn(login, password)
+      System.out.println("DUMMY LOGIN SUCCEEDED");
+      return true;
     }
 
     public static void FriendList() {
         // TODO: IMPLEMENT ME
+        for (int i = 0; i < 3; i++) {
+           System.out.printf("Fake Friend %d%n", i);
+        }
     }
 
     public static void ChangePassword() {
         // TODO: IMPLEMENT ME
+        System.out.println("DUMMY PASSWORD CHANGED");
     }
 
     public static void NewMessage() {
         // TODO: IMPLEMENT ME
+        System.out.println("SENDING FAKE MESSAGE");
     }
 
     public static void SendRequest() {
-        // TODOL: IMPLEMENT ME
+        // TODO: IMPLEMENT ME
+        System.out.println("SENDING FAKE FRIEND REQUEST");
     }
 }
 
