@@ -136,7 +136,7 @@ public class CommandLineDriver {
         System.out.print("\tEnter user password: ");
         String password = in.next();
 
-      this.esql.LogIn(login, password);
+      esql.LogIn(login, password);
       System.out.println("DUMMY LOGIN SUCCEEDED");
 
       return true;
