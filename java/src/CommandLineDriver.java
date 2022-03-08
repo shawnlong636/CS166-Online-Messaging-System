@@ -128,7 +128,7 @@ public class CommandLineDriver {
     System.out.print("\tEnter user email: ");
     String email = in.readLine();
 
-      esql.createUser(login, password, email);
+      esql.CreateUser(login, password, email);
     
     }
 
