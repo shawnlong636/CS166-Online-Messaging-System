@@ -244,7 +244,7 @@ public class ProfNetwork {
    public boolean LogIn(String login, String password){
       try{
          String query = String.format("SELECT * FROM USR WHERE userId = '%s' AND password = '%s'", login, password);
-         int userNum = esql.executeQuery(query);
+         int userNum = this.executeQuery(query);
          if (userNum > 0) {
             return true;
          } else {
