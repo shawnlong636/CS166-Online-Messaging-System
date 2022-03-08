@@ -34,11 +34,6 @@ public class ProfNetwork {
    // reference to physical database connection.
    private Connection _connection = null;
 
-   // handling the keyboard inputs through a BufferedReader
-   // This variable can be global for convenience.
-   static BufferedReader in = new BufferedReader(
-                                new InputStreamReader(System.in));
-
    /**
     * Creates a new instance of ProfNetwork
     *
@@ -73,7 +68,7 @@ public class ProfNetwork {
     * @param sql the input SQL string
     * @throws java.sql.SQLException when update failed
     */
-   public void executeUpdate (String sql) throws SQLException {
+   private void executeUpdate (String sql) throws SQLException {
       // creates a statement object
       Statement stmt = this._connection.createStatement ();
 
@@ -93,7 +88,7 @@ public class ProfNetwork {
     * @return the number of rows returned
     * @throws java.sql.SQLException when failed to execute the query
     */
-   public int executeQueryAndPrintResult (String query) throws SQLException {
+   private int executeQueryAndPrintResult (String query) throws SQLException {
       // creates a statement object
       Statement stmt = this._connection.createStatement ();
 
@@ -136,7 +131,7 @@ public class ProfNetwork {
     * @return the query result as a list of records
     * @throws java.sql.SQLException when failed to execute the query
     */
-   public List<List<String>> executeQueryAndReturnResult (String query) throws SQLException {
+   private List<List<String>> executeQueryAndReturnResult (String query) throws SQLException {
       // creates a statement object
       Statement stmt = this._connection.createStatement ();
 
@@ -172,7 +167,7 @@ public class ProfNetwork {
     * @return the number of rows returned
     * @throws java.sql.SQLException when failed to execute the query
     */
-   public int executeQuery (String query) throws SQLException {
+   private int executeQuery (String query) throws SQLException {
        // creates a statement object
        Statement stmt = this._connection.createStatement ();
 
@@ -198,7 +193,7 @@ public class ProfNetwork {
     * @return current value of a sequence
     * @throws java.sql.SQLException when failed to execute the query
     */
-   public int getCurrSeqVal(String sequence) throws SQLException {
+   private int getCurrSeqVal(String sequence) throws SQLException {
 	Statement stmt = this._connection.createStatement ();
 
 	ResultSet rs = stmt.executeQuery (String.format("Select currval('%s')", sequence));
@@ -220,155 +215,44 @@ public class ProfNetwork {
       }//end try
    }//end cleanup
 
-   /**
-    * The main execution method
-    *
-    * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
-    */
-   public static void main (String[] args) {
-      if (args.length != 3) {
-         System.err.println (
-            "Usage: " +
-            "java [-classpath <classpath>] " +
-            ProfNetwork.class.getName () +
-            " <dbname> <port> <user>");
-         return;
-      }//end if
-
-      Greeting();
-      ProfNetwork esql = null;
-      try{
-         // use postgres JDBC driver.
-         Class.forName ("org.postgresql.Driver").newInstance ();
-         // instantiate the ProfNetwork object and creates a physical
-         // connection.
-         String dbname = args[0];
-         String dbport = args[1];
-         String user = args[2];
-         esql = new ProfNetwork (dbname, dbport, user, "");
-
-         boolean keepon = true;
-         while(keepon) {
-            // These are sample SQL statements
-            System.out.println("MAIN MENU");
-            System.out.println("---------");
-            System.out.println("1. Create user");
-            System.out.println("2. Log in");
-            System.out.println("9. < EXIT");
-            String authorisedUser = null;
-            switch (readChoice()){
-               case 1: CreateUser(esql); break;
-               case 2: authorisedUser = LogIn(esql); break;
-               case 9: keepon = false; break;
-               default : System.out.println("Unrecognized choice!"); break;
-            }//end switch
-            if (authorisedUser != null) {
-              boolean usermenu = true;
-              while(usermenu) {
-                System.out.println("MAIN MENU");
-                System.out.println("---------");
-                System.out.println("1. Goto Friend List");
-                System.out.println("2. Update Profile");
-                System.out.println("3. Write a new message");
-                System.out.println("4. Send Friend Request");
-                System.out.println(".........................");
-                System.out.println("9. Log out");
-                switch (readChoice()){
-                   case 1: FriendList(esql); break;
-                   case 2: UpdateProfile(esql); break;
-                   case 3: NewMessage(esql); break;
-                   case 4: SendRequest(esql); break;
-                   case 9: usermenu = false; break;
-                   default : System.out.println("Unrecognized choice!"); break;
-                }
-              }
-            }
-         }//end while
-      }catch(Exception e) {
-         System.err.println (e.getMessage ());
-      }finally{
-         // make sure to cleanup the created table and close the connection.
-         try{
-            if(esql != null) {
-               System.out.print("Disconnecting from database...");
-               esql.cleanup ();
-               System.out.println("Done\n\nBye !");
-            }//end if
-         }catch (Exception e) {
-            // ignored.
-         }//end try
-      }//end try
-   }//end main
-
-   public static void Greeting(){
-      System.out.println(
-         "\n\n*******************************************************\n" +
-         "              User Interface      	               \n" +
-         "*******************************************************\n");
-   }//end Greeting
-
    /*
-    * Reads the users choice given from the keyboard
-    * @int
-    **/
-   public static int readChoice() {
-      int input;
-      // returns only if a correct value is given.
-      do {
-         System.out.print("Please make your choice: ");
-         try { // read the integer, parse it and break.
-            input = Integer.parseInt(in.readLine());
-            break;
-         }catch (Exception e) {
-            System.out.println("Your input is invalid!");
-            continue;
-         }//end try
-      }while (true);
-      return input;
-   }//end readChoice
-
-   /*
-    * Creates a new user with privided login, passowrd and phoneNum
+    * Creates a new user with provided login, passowrd and email
     * An empty block and contact list would be generated and associated with a user
     **/
-   public static void CreateUser(ProfNetwork esql){
+   public boolean CreateUser(String login, String password, String email){
       try{
-         System.out.print("\tEnter user login: ");
-         String login = in.readLine();
-         System.out.print("\tEnter user password: ");
-         String password = in.readLine();
-         System.out.print("\tEnter user email: ");
-         String email = in.readLine();
 
-	 //Creating empty contact\block lists for a user
-	 String query = String.format("INSERT INTO USR (userId, password, email, contact_list) VALUES ('%s','%s','%s')", login, password, email);
+         //Creating empty contact\block lists for a user
+         String query = String.format("INSERT INTO USR (userId, password, email, contact_list) VALUES ('%s','%s','%s')", login, password, email);
 
-         esql.executeUpdate(query);
+         this.executeUpdate(query);
          System.out.println ("User successfully created!");
+
+         return true;
+
       }catch(Exception e){
          System.err.println (e.getMessage ());
+         return false;
       }
    }//end
 
    /*
     * Check log in credentials for an existing user
-    * @return User login or null is the user does not exist
+    * @return true if login succeeded else false if 
+    * the user/password doesn't exist in the database
     **/
-   public static String LogIn(ProfNetwork esql){
+   public boolean LogIn(String login, String password){
       try{
-         System.out.print("\tEnter user login: ");
-         String login = in.readLine();
-         System.out.print("\tEnter user password: ");
-         String password = in.readLine();
-
          String query = String.format("SELECT * FROM USR WHERE userId = '%s' AND password = '%s'", login, password);
-         int userNum = esql.executeQuery(query);
-	 if (userNum > 0)
-		return login;
-         return null;
+         int userNum = this.executeQuery(query);
+         if (userNum > 0) {
+            return true;
+         } else {
+            return false;
+         }
       }catch(Exception e){
          System.err.println (e.getMessage ());
-         return null;
+         return false;
       }
    }//end
 
@@ -378,10 +262,13 @@ public class ProfNetwork {
     * Query the list of friends for the given user
     * @return the list, or null if there are no friends
     **/
-public static String FriendList(ProfNetwork esql){
+public List<String> FriendList(String user){
    try{
       // TODO: IMPLEMENT ME
-      return "";
+
+      List<String> friends = new ArrayList<String>();
+
+      return friends;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
@@ -393,14 +280,14 @@ public static String FriendList(ProfNetwork esql){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static String UpdateProfile(ProfNetwork esql){
+public boolean ChangePassword(String user, String password){
    try{
       // TODO: IMPLEMENT ME
-      return "";
+      return true;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
-      return null;
+      return false;
    }
 }
 
@@ -408,14 +295,15 @@ public static String UpdateProfile(ProfNetwork esql){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static String NewMessage(ProfNetwork esql){
+public boolean NewMessage(String user, String recipient, String message){
    try{
       // TODO: IMPLEMENT ME
-      return "";
+
+      return true;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
-      return null;
+      return false;
    }
 }
 
@@ -423,14 +311,14 @@ public static String NewMessage(ProfNetwork esql){
     * 
     * TODO: WRITE DESCRIPTION
     **/
-public static String SendRequest(ProfNetwork esql){
+public boolean SendRequest(String user, String requestedUser){
    try{
       // TODO: IMPLEMENT ME
-      return "";
+      return true;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
-      return null;
+      return false;
    }
 }
 
