@@ -31,7 +31,7 @@ public class CommandLineDriver {
          // connection.
          String dbname = args[0];
          String dbport = args[1];
-         String currentUser = args[2];
+         String user = args[2];
          esql = new ProfNetwork (dbname, dbport, user, "");
 
          boolean keepon = true;
@@ -42,7 +42,7 @@ public class CommandLineDriver {
             System.out.println("1. Create user");
             System.out.println("2. Log in");
             System.out.println("9. < EXIT");
-            String user = "";
+            String currentUser = "";
             switch (readChoice()){
                case 1: CreateUser(esql); break;
                case 2: currentUser = LogIn(esql); break;
