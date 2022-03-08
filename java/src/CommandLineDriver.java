@@ -36,7 +36,7 @@ public class CommandLineDriver {
             System.out.println("2. Log in");
             System.out.println("9. < EXIT");
             boolean authorisedUser = false;
-            switch (readChoice(esql)){
+            switch (readChoice()){
                case 1: CreateUser(esql); break;
                case 2: authorisedUser = LogIn(esql); break;
                case 9: keepon = false; break;
