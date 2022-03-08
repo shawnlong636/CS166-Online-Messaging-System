@@ -31,7 +31,7 @@ public class CommandLineDriver {
          // connection.
          String dbname = args[0];
          String dbport = args[1];
-         String user = args[2];
+         String currentUser = args[2];
          esql = new ProfNetwork (dbname, dbport, user, "");
 
          boolean keepon = true;
@@ -107,7 +107,7 @@ public class CommandLineDriver {
       do {
          System.out.print("Please make your choice: ");
          try { // read the integer, parse it and break.
-            input = in.nextInt();
+            input = Integer.parseInt(in.next());
             break;
          }catch (Exception e) {
             System.out.println("Your input is invalid!");
@@ -137,6 +137,7 @@ public class CommandLineDriver {
       String password = in.next();
 
       boolean succeeded = esql.LogIn(login, password);
+      succeeded = true; // For testing only
 
       if (succeeded) {
          System.out.println("DUMMY LOGIN SUCCEEDED");
@@ -145,9 +146,6 @@ public class CommandLineDriver {
          System.out.println("Login failed.");
          return "";
       }
-      
-
-   return true;
    }
 
     public static void FriendList(ProfNetwork esql, String username) {
