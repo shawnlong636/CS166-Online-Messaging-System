@@ -107,7 +107,7 @@ public class CommandLineDriver {
       do {
          System.out.print("Please make your choice: ");
          try { // read the integer, parse it and break.
-            input = Integer.parseInt(in.nextInt());
+            input = in.nextInt();
             break;
          }catch (Exception e) {
             System.out.println("Your input is invalid!");
