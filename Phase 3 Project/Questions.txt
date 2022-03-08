@@ -1,0 +1,34 @@
+1 What is your favorite colour?
+1 What colour is blood?
+1 What colour is a red shirt?
+2 What colour is a blue shirt?
+3 Gibbirish
+4 What is your favorite red?
+5 What is the time for CS 003B in Winter 2020?
+6 What is the professor for CS 003B in winter 2020?
+7 What course you have to take before taking CS 3A?
+8 Can I use my AP computer science to replace CS002?
+9 Do I have to complete IGETC before transferring as a computer science major?
+10 Where is the office for CS?
+11 What language is CS002 taught in?
+12 Is it better to learn Java or C++?
+13 What language is taught in CS 3C?
+14 What is taught in CS 08?
+15 How can I get help with my homework assignments?
+16 What room is the Math Division in?
+17 What is the email of the Math Division?
+18 What is the email of the Computer Science Division?
+19 What do you learn in CS 3A? 
+20 Where is Jamal Ashrafs Office? 
+21 How many CS classes are required to transfer to UCLA as a CS major? 
+22 Where is the Math Success Center?
+23 Who is the Math and Computer Science division dean?
+24 What are the prerequisites for CS002?
+25 Prerequisite: CS002
+26 May be taken concurrently with CS003A or CS003B
+27 Is CS003A/C++ required to take CS003B/Java?
+28 Do I take C++ or Java?
+29 What are Ashraf's winter office hours?
+30 What is a paradox?
+31 What time does class end?
+2 What colour is a 

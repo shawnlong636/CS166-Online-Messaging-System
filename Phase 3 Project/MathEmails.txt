@@ -1,0 +1,7 @@
+Chair of Department chairdepartmentemail@gmail.com
+Math Teacher 1 mathteacher1email@gmail.com
+Math Teacher 2 mathteacher2email@gmail.com
+Math Teacher 3 mathteacher3email@gmail.com
+Dean 1 dean1email@gmail.com
+Dean 2 dean2email@gmail.com
+Dean 3 dean3email@gmail.com
