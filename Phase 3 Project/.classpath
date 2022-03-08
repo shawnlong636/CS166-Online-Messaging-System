@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="activation.jar"/>
 	<classpathentry kind="lib" path="javax.mail.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Aya/Desktop/transfer stuff/School/UCR/CS166/Phase 3 Project/activation.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Aya/Desktop/transfer stuff/School/UCR/CS166/Phase 3 Project/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Aya/Desktop/transfer stuff/School/UCR/CS166/Project Repo/CS166-Online-Messaging-System/Phase 3 Project/activation.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Aya/Desktop/transfer stuff/School/UCR/CS166/Project Repo/CS166-Online-Messaging-System/Phase 3 Project/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
