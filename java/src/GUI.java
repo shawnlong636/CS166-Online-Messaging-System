@@ -49,7 +49,7 @@ public class GUI extends JFrame
 	private JTextField EmailField;
 	private JPanel inputPanel;
 	private JPanel outputPanel;
-	private JComboBox options;
+	private JComboBox<String> options;
 	private ActionListener listener;
 	private JPanel panel;
 	private JRadioButton accountCreation;
@@ -86,6 +86,7 @@ public class GUI extends JFrame
 		menuBar = new JMenuBar();
 		listener = new ChoiceListener();
 		panel.setLayout(new BorderLayout());
+		options = new JComboBox<String>();
 		tasks = createRadioButtons();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
@@ -202,8 +203,10 @@ public class GUI extends JFrame
 	 */
 	private JPanel createComboBox()
 	{
-		options = new JComboBox();
-		
+
+		options.removeAllItems();
+		options.removeActionListener(listener);
+
 		options.addItem("");
 		options.addItem("Back");
 		options.addItem("Logout");
@@ -212,8 +215,9 @@ public class GUI extends JFrame
 		options.addItem("Connection Request");
 		options.addItem("Friends");
 		options.addItem("Messages");
-		
+
 		options.addActionListener(listener);
+
 		JPanel panel = new JPanel();
 		panel.add(options);
 		return panel;
@@ -225,12 +229,13 @@ public class GUI extends JFrame
 	public void setOptions()
 	{
 		selection = (String)options.getSelectedItem();
+		System.out.print(selection);
 		ChangePassword changePassword = new ChangePassword();
 		Search search = new Search();
 		Connection_Request connectionRequest = new Connection_Request();
 		Friends friends = new Friends();
 		Messages messages = new Messages();
-		
+		createControlPanel();
 		if(selection.equals("Back"))
 		{
 			userHomeGUI();
@@ -261,10 +266,10 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
 			getContentPane().add(panel);
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridLayout(0,2));
@@ -303,10 +308,10 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
 			getContentPane().add(panel);
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new FlowLayout());
@@ -336,10 +341,10 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
 			getContentPane().add(panel);
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new FlowLayout());
@@ -377,10 +382,10 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
 			getContentPane().add(panel);
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new FlowLayout());
@@ -419,7 +424,7 @@ public class GUI extends JFrame
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -474,7 +479,7 @@ public class GUI extends JFrame
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -746,12 +751,12 @@ public class GUI extends JFrame
 	 */
 	public JPanel createRadioButtons()
 	{
-		ActionListener listener = new ButtonListener();
+		ActionListener buttonListener = new ButtonListener();
 		accountCreation = new JRadioButton("Account Creation");
-		accountCreation.addActionListener(listener);
+		accountCreation.addActionListener(buttonListener);
 		
 		logIn = new JRadioButton("Log In");
-		logIn.addActionListener(listener);
+		logIn.addActionListener(buttonListener);
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(accountCreation);
@@ -796,8 +801,8 @@ public class GUI extends JFrame
 	{
 		JMenu menu = new JMenu("File");
 		JMenuItem exitItem = new JMenuItem("Exit");
-		ActionListener listener = new ExitItemListener();
-		exitItem.addActionListener(listener);
+		ActionListener exitItemListener = new ExitItemListener();
+		exitItem.addActionListener(exitItemListener);
 		menu.add(exitItem);
 		return menu;
 	}
