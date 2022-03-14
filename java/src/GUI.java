@@ -3,12 +3,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -23,13 +19,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 
 /**
-This frame has a menu with commands to send an email
+This java file creates the main body and content that FrameViewer.java uses. 
+Additionally contains the logic and necessary code to link the GUI the database provided in ProfNetwork.java.
 */
 public class GUI extends JFrame
 {
@@ -77,38 +73,43 @@ public class GUI extends JFrame
 	private JButton FriendRequestButton;
 	
 	/**
-	Constructs the main GUI layout
+	Initializes all necessary variables needed to create the GUI
 	*/
 	public GUI()
 	{
 		userData = new String[3];
 		panel = new JPanel();
+		main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		menuBar = new JMenuBar();
-		listener = new ChoiceListener();
 		panel.setLayout(new BorderLayout());
 		options = new JComboBox<String>();
 		tasks = createRadioButtons();
+		inputPanel = new JPanel();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		//createGUI();
-		userHomeGUI();
+		createGUI();
+		//userHomeGUI();
 	}
 	
+	/**
+	Constructs the main GUI layout
+	*/	
 	public void createGUI()
 	{
 		
 		// Construct menu
 		panel.removeAll();
-
+		inputPanel.removeAll();
+		
 		getContentPane().add(panel);
-
+		
 		createTextField();
 		createTextArea();
 		createPanel();
-		createControlPanel();
+		//createControlPanel();
 		
-		main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		verticalSplit.removeAll();
 		panel.add(main, BorderLayout.CENTER);
 		verticalSplit.setLeftComponent(tasks);
 		verticalSplit.setRightComponent(inputPanel);
@@ -120,12 +121,19 @@ public class GUI extends JFrame
 		panel.updateUI();
 		panel.repaint();
 		
-	}
 	
+	}
+
+	/**
+	Constructs the main user homepage that the user will see after logging in
+	This method displays text relevant to the user's homepage and provides selections to access
+	other parts of the messaging system.
+	*/		
 	public void userHomeGUI()
 	{
 		panel.removeAll();
 		getContentPane().add(panel);
+		listener = new ChoiceListener();
 		createTextArea();
 		createPanel();
 		createControlPanel();
@@ -163,6 +171,23 @@ public class GUI extends JFrame
 	
 	/**
 	 * A listener that implements the ActionListener class and 
+	 * overrides the actionPerformed method to return to the landing page
+	 * based on a user input.
+	 */
+	class HomeListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			int choice = JOptionPane.showConfirmDialog(null, "Returning to the home screen. This will log you out if you are logged in. Confirm?");
+			if(choice == 0)
+			{
+				createGUI();
+				return;
+			}
+		}
+	}	
+	/**
+	 * A listener that implements the ActionListener class and 
 	 * overrides the actionPerformed method to set the index
 	 * based on a user input.
 	 */
@@ -174,6 +199,11 @@ public class GUI extends JFrame
 		}
 	}
 
+	/**
+	 * A listener that implements the ActionListener class and 
+	 * overrides the actionPerformed method to create a panel based on
+	 * a user's action.
+	 */
 	class AccountListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -229,12 +259,7 @@ public class GUI extends JFrame
 	public void setOptions()
 	{
 		selection = (String)options.getSelectedItem();
-		System.out.print(selection);
-		ChangePassword changePassword = new ChangePassword();
-		Search search = new Search();
-		Connection_Request connectionRequest = new Connection_Request();
-		Friends friends = new Friends();
-		Messages messages = new Messages();
+
 		createControlPanel();
 		if(selection.equals("Back"))
 		{
@@ -271,7 +296,8 @@ public class GUI extends JFrame
 			getContentPane().add(panel);
 			//listener = new ChoiceListener();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setLayout(new GridLayout(0,2));
 			
 			inputPanel.add(CurrentPassword);
@@ -313,7 +339,8 @@ public class GUI extends JFrame
 			getContentPane().add(panel);
 			//listener = new ChoiceListener();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
 			inputPanel.add(Search);
@@ -346,7 +373,8 @@ public class GUI extends JFrame
 			getContentPane().add(panel);
 			//listener = new ChoiceListener();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
 			inputPanel.add(Connection);
@@ -387,7 +415,8 @@ public class GUI extends JFrame
 			getContentPane().add(panel);
 			//listener = new ChoiceListener();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
 			textArea.setText("Show friends here");
@@ -403,7 +432,7 @@ public class GUI extends JFrame
 		}
 		if(selection.equals("Messages"))
 		{
-			messages.display();
+			//
 		}
 		outputPanel.repaint();
 	}
@@ -433,11 +462,13 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setBorder(new EtchedBorder());
-			inputPanel.setLayout(new FlowLayout());
+			//inputPanel.setLayout(new FlowLayout());
+			inputPanel.setLayout(new GridLayout(0,2));
 			
 			inputPanel.add(UserID);
 			inputPanel.add(UserIDField);
@@ -462,7 +493,8 @@ public class GUI extends JFrame
 			textArea.setEditable(false);
 			createTextArea();
 			main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-			panel.add(main, BorderLayout.CENTER);
+			//panel.add(main, BorderLayout.CENTER);
+			panel.add(main,BorderLayout.NORTH);
 			main.setLeftComponent(inputPanel);
 			main.setRightComponent(outputPanel);
 			setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -488,9 +520,10 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			createControlPanel();
+			//createControlPanel();
 			
-			inputPanel = new JPanel();
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
 			inputPanel.setBorder(new EtchedBorder());
 			inputPanel.setLayout(new FlowLayout());
 			
@@ -636,6 +669,12 @@ public class GUI extends JFrame
 		        	}
 		         }
 		     };
+		     
+	 	/**
+	 	 * A listener that implements the ActionListener class and 
+	 	 * overrides the actionPerformed method to give the user confirmation
+	 	 * that a friend request was sent.
+	 	 */
 	     class FriendRequestListener implements ActionListener
 			{
 		         public void actionPerformed(ActionEvent event) {
@@ -800,6 +839,10 @@ public class GUI extends JFrame
 	public JMenu createFileMenu()
 	{
 		JMenu menu = new JMenu("File");
+		JMenuItem back = new JMenuItem("Home");
+		ActionListener homeListener = new HomeListener();
+		back.addActionListener(homeListener);
+		menu.add(back);
 		JMenuItem exitItem = new JMenuItem("Exit");
 		ActionListener exitItemListener = new ExitItemListener();
 		exitItem.addActionListener(exitItemListener);
