@@ -3,7 +3,7 @@ echo "creating db named ... "$USER"_DB"
 createdb -h localhost -p $PGPORT $USER"_DB"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cp $DIR../../data/*.data /tmp/$USER/myDB/data/
+cp $DIR../../data/*.csv /tmp/$USER/myDB/data/
 
 psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/create_tables.sql
 psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/create_indexes.sql
