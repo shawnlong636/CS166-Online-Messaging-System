@@ -1,5 +1,5 @@
 COPY USR
-FROM 'message.csv'
+FROM 'usr.csv'
 WITH DELIMITER ',';
 
 COPY WORK_EXPR
