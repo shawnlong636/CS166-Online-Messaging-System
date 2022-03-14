@@ -6,43 +6,43 @@ DROP TABLE IF EXISTS USR;
 
 
 CREATE TABLE USR(
-	userId varchar(10) UNIQUE NOT NULL, 
-	password varchar(10) NOT NULL,
-	email text NOT NULL,
-	name char(50),
+	userId TEXT UNIQUE NOT NULL, 
+	password TEXT NOT NULL,
+	email TEXT NOT NULL,
+	name TEXT,
 	dateOfBirth date,
 	Primary Key(userId));
 
 CREATE TABLE WORK_EXPR(
-	userId char(10) NOT NULL, 
-	company char(50) NOT NULL, 
-	role char(50) NOT NULL,
-	location char(50),
+	userId TEXT NOT NULL, 
+	company TEXT NOT NULL, 
+	role TEXT NOT NULL,
+	location TEXT,
 	startDate date,
 	endDate date,
 	PRIMARY KEY(userId,company,role,startDate));
 
 CREATE TABLE EDUCATIONAL_DETAILS(
-	userId char(10) NOT NULL, 
-	instituitionName char(50) NOT NULL, 
-	major char(50) NOT NULL,
-	degree char(50) NOT NULL,
+	userId TEXT NOT NULL, 
+	instituitionName TEXT NOT NULL, 
+	major TEXT NOT NULL,
+	degree TEXT NOT NULL,
 	startdate date,
 	enddate date,
 	PRIMARY KEY(userId,major,degree));
 
 CREATE TABLE MESSAGE(
 	msgId integer UNIQUE NOT NULL, 
-	senderId char(10) NOT NULL,
-	receiverId char(10) NOT NULL,
-	contents char(500) NOT NULL,
+	senderId TEXT NOT NULL,
+	receiverId TEXT NOT NULL,
+	contents TEXT NOT NULL,
 	sendTime timestamp,
 	deleteStatus integer,
-	status char(30) NOT NULL,
+	status TEXT NOT NULL,
 	PRIMARY KEY(msgId));
 
 CREATE TABLE CONNECTION_USR(
-	userId char(10) NOT NULL, 
-	connectionId char(10) NOT NULL, 
-	status char(30) NOT NULL,
+	userId TEXT NOT NULL, 
+	connectionId TEXT NOT NULL, 
+	status TEXT NOT NULL,
 	PRIMARY KEY(userId,connectionId));
