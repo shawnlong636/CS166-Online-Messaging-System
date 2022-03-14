@@ -49,7 +49,7 @@ public class GUI extends JFrame
 	private JTextField EmailField;
 	private JPanel inputPanel;
 	private JPanel outputPanel;
-	private JComboBox options;
+	private JComboBox<String> options;
 	private ActionListener listener;
 	private JPanel panel;
 	private JRadioButton accountCreation;
@@ -58,13 +58,23 @@ public class GUI extends JFrame
 	private JSplitPane verticalSplit;
 	private String[] userData;
 	private JButton submitButton;
-	private JPasswordField PasswordField;
+	private JButton searchSubmitButton;
 	private JLabel Password;
-	private JPasswordField ConfirmPasswordField;
+	private JPasswordField PasswordField;
 	private JLabel ConfirmPassword;
+	private JPasswordField ConfirmPasswordField;
+	private JLabel CurrentPassword;
+	private JPasswordField CurrentPasswordField;
+	private JLabel Search;
+	private JTextField SearchField;
+	private JLabel Connection;
+	private JButton ConnectionSearchButton;
+	private JTextField ConnectionField;
 	private JPanel tasks;
 	private JMenuBar menuBar;
 	private String selection;
+	private JPanel userPanel;
+	private JButton FriendRequestButton;
 	
 	/**
 	Constructs the main GUI layout
@@ -76,10 +86,12 @@ public class GUI extends JFrame
 		menuBar = new JMenuBar();
 		listener = new ChoiceListener();
 		panel.setLayout(new BorderLayout());
+		options = new JComboBox<String>();
 		tasks = createRadioButtons();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		createGUI();
+		//createGUI();
+		userHomeGUI();
 	}
 	
 	public void createGUI()
@@ -95,7 +107,6 @@ public class GUI extends JFrame
 		createPanel();
 		createControlPanel();
 		
-		System.out.println(selection);
 		main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		panel.add(main, BorderLayout.CENTER);
@@ -108,6 +119,19 @@ public class GUI extends JFrame
 		panel.revalidate();
 		panel.updateUI();
 		panel.repaint();
+		
+	}
+	
+	public void userHomeGUI()
+	{
+		panel.removeAll();
+		getContentPane().add(panel);
+		createTextArea();
+		createPanel();
+		createControlPanel();
+		textArea.setText("Welcome [name] to the User Homepage");
+		panel.add(outputPanel);
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		
 	}
 	/**
@@ -179,18 +203,21 @@ public class GUI extends JFrame
 	 */
 	private JPanel createComboBox()
 	{
-		options = new JComboBox();
-		
-		options.addItem("Failure");
+
+		options.removeAllItems();
+		options.removeActionListener(listener);
+
+		options.addItem("");
+		options.addItem("Back");
 		options.addItem("Logout");
 		options.addItem("Change Password");
 		options.addItem("Search");
 		options.addItem("Connection Request");
-		options.addItem("View Friends");
+		options.addItem("Friends");
 		options.addItem("Messages");
-		
+
 		options.addActionListener(listener);
-		options.setSelectedIndex(0);
+
 		JPanel panel = new JPanel();
 		panel.add(options);
 		return panel;
@@ -202,13 +229,17 @@ public class GUI extends JFrame
 	public void setOptions()
 	{
 		selection = (String)options.getSelectedItem();
+		System.out.print(selection);
 		ChangePassword changePassword = new ChangePassword();
 		Search search = new Search();
 		Connection_Request connectionRequest = new Connection_Request();
 		Friends friends = new Friends();
 		Messages messages = new Messages();
-		
-		System.out.println(selection);
+		createControlPanel();
+		if(selection.equals("Back"))
+		{
+			userHomeGUI();
+		}
 		if(selection.equals("Logout"))
 		{
 			int choice = JOptionPane.showConfirmDialog(null, "Would you like to logout?");
@@ -217,29 +248,160 @@ public class GUI extends JFrame
 				createGUI();
 				return;
 			}
-			
 		}
 		if(selection.equals("Change Password"))
-		{
-			changePassword.display();		
+		{		
 			//confirm current password
 			//new password
 			//confirm new password
+			panel.removeAll();
+			JMenuBar menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+			menuBar.add(createFileMenu());
+			
+			// Construct menu
+			panel.setLayout(new BorderLayout());
+			getContentPane().add(panel);
+			
+			createTextField();
+			createTextArea();
+			createPanel();
+			//createControlPanel();
+			
+			getContentPane().add(panel);
+			//listener = new ChoiceListener();
+			
+			inputPanel = new JPanel();
+			inputPanel.setLayout(new GridLayout(0,2));
+			
+			inputPanel.add(CurrentPassword);
+			inputPanel.add(CurrentPasswordField);
+
+			inputPanel.add(Password);
+			inputPanel.add(PasswordField);
+
+			inputPanel.add(ConfirmPassword);
+			inputPanel.add(ConfirmPasswordField);
+
+			
+			inputPanel.add(submitButton);
+			panel.add(inputPanel,BorderLayout.NORTH);
+			setSize(FRAME_WIDTH, FRAME_HEIGHT);
+			
+			panel.revalidate();
+			panel.updateUI();
+			panel.repaint();
 		}
-		if(selection.equals("Search"));
+		if(selection.equals("Search"))
 		{
-			search.display();
 			//send query into database to find a match
+			//search person
+			panel.removeAll();
+			JMenuBar menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+			menuBar.add(createFileMenu());
+			
+			// Construct menu
+			panel.setLayout(new BorderLayout());
+			getContentPane().add(panel);
+			
+			createTextField();
+			createTextArea();
+			createPanel();
+			//createControlPanel();
+			
+			getContentPane().add(panel);
+			//listener = new ChoiceListener();
+			
+			inputPanel = new JPanel();
+			inputPanel.setLayout(new FlowLayout());
+			
+			inputPanel.add(Search);
+			inputPanel.add(SearchField);
+			
+			inputPanel.add(searchSubmitButton);
+			panel.add(inputPanel,BorderLayout.NORTH);
+			setSize(FRAME_WIDTH, FRAME_HEIGHT);
+			
+			panel.revalidate();
+			panel.updateUI();
+			panel.repaint();
 		}
-		if(selection.equals("Connection Request"));
+		if(selection.equals("Connection Request"))
 		{
-			connectionRequest.display();
+			panel.removeAll();
+			JMenuBar menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+			menuBar.add(createFileMenu());
+			
+			// Construct menu
+			panel.setLayout(new BorderLayout());
+			getContentPane().add(panel);
+			
+			createTextField();
+			createTextArea();
+			createPanel();
+			//createControlPanel();
+			
+			getContentPane().add(panel);
+			//listener = new ChoiceListener();
+			
+			inputPanel = new JPanel();
+			inputPanel.setLayout(new FlowLayout());
+			
+			inputPanel.add(Connection);
+			inputPanel.add(ConnectionField);
+			
+			textArea.setText("Show database connections and connection requests here");
+			outputPanel.add(textArea);
+			inputPanel.add(ConnectionSearchButton);
+			panel.add(inputPanel,BorderLayout.NORTH);
+			panel.add(outputPanel, BorderLayout.SOUTH);
+			
+			setSize(FRAME_WIDTH, FRAME_HEIGHT);
+			
+			panel.revalidate();
+			panel.updateUI();
+			panel.repaint();
 		}
-		if(selection.equals("Friends"));
+		if(selection.equals("Friends"))
 		{
-			friends.display();
+			/*some more code here depending on the linking where we can call connection request or send message
+			also need to be able to click on profile 
+			from userUI menu -> friends -> friend profile -> friend list -> friend profile -> friend list ...
+			connection request only have to be shown on profile*/
+			panel.removeAll();
+			JMenuBar menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+			menuBar.add(createFileMenu());
+			
+			// Construct menu
+			panel.setLayout(new BorderLayout());
+			getContentPane().add(panel);
+			
+			createTextField();
+			createTextArea();
+			createPanel();
+			//createControlPanel();
+			
+			getContentPane().add(panel);
+			//listener = new ChoiceListener();
+			
+			inputPanel = new JPanel();
+			inputPanel.setLayout(new FlowLayout());
+			
+			textArea.setText("Show friends here");
+			outputPanel.add(textArea);
+			inputPanel.add(FriendRequestButton);
+			panel.add(inputPanel,BorderLayout.NORTH);
+			panel.add(outputPanel, BorderLayout.SOUTH);
+			setSize(FRAME_WIDTH, FRAME_HEIGHT);
+			
+			panel.revalidate();
+			panel.updateUI();
+			panel.repaint();
 		}
-		if(selection.equals("Messages"));
+		if(selection.equals("Messages"))
 		{
 			messages.display();
 		}
@@ -262,7 +424,7 @@ public class GUI extends JFrame
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -317,7 +479,7 @@ public class GUI extends JFrame
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			listener = new ChoiceListener();
+			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -418,12 +580,46 @@ public class GUI extends JFrame
 					add.saveInfo(dataToSave);
 		            //JOptionPane.showMessageDialog(panel, "Submitted!");
 	        	}
+	        	/*else if(CurrentPasswordField.getText().equals(database password))
+	        	{
+	        		
+	        	}*/
 	        	else
 	        	{
 		            JOptionPane.showMessageDialog(panel, "Password does not match. Please try again.");
 	        	}
 	         }
 	     };
+	     
+	     class SearchSubmitListener implements ActionListener
+		{
+		         public void actionPerformed(ActionEvent event) {
+		        	/*if(search matches database)
+		        	{
+
+		        	}
+		        	else
+		        	{
+			            JOptionPane.showMessageDialog(panel, "User could not be found.");
+		        	}*/
+		        	JOptionPane.showMessageDialog(panel, "User could not be found.");
+		         }
+		};
+	     class ConnectionSearchListener implements ActionListener
+		{
+		         public void actionPerformed(ActionEvent event) {
+		        	/*if(new user then 5 new connections without rule)
+		        	{
+
+		        	}
+		        	else
+		        	{
+			           //apply lvl 3 rule here
+		        	}*/
+		        	JOptionPane.showMessageDialog(panel, "Button Test.");
+		         }
+		};
+		          
 	     class LogInListener implements ActionListener
 			{
 		         public void actionPerformed(ActionEvent event) {
@@ -431,38 +627,8 @@ public class GUI extends JFrame
 		        	if(panel.equals(0))//if username and password match database entries, then x
 		        	{
 		        		//some code that pulls data from the database to populate the user page
-		    			
-		    			/*panel.removeAll();
-		    			JMenuBar menuBar = new JMenuBar();
-		    			setJMenuBar(menuBar);
-		    			menuBar.add(createFileMenu());
-		    			
-		    			//listener = new ChoiceListener();
-		    			// Construct menu
-		    			panel = new JPanel();
-		    			panel.setLayout(new BorderLayout());
-		    			getContentPane().add(panel);
-		    			
-		    			createTextField();
-		    			createControlPanel();
-		    			
-		    			inputPanel = new JPanel();
-		    			inputPanel.setBorder(new EtchedBorder());
-		    			inputPanel.setLayout(new FlowLayout());
-		    			
-		    			
-		    			textArea.setText("Please enter your user information in the fields to the left.");
-		    			textArea.setEditable(false);
-		    			createTextArea();
-		    			main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		    			panel.add(main, BorderLayout.CENTER);
-		    			main.setLeftComponent(inputPanel);
-		    			main.setRightComponent(outputPanel);
-		    			setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		    			
-		    			panel.revalidate();
-		    			panel.repaint();
-		    			panel.updateUI();*/
+		    			userHomeGUI();
+		    			//but also personalized with user info
 		        	}
 		        	else
 		        	{
@@ -470,6 +636,13 @@ public class GUI extends JFrame
 		        	}
 		         }
 		     };
+	     class FriendRequestListener implements ActionListener
+			{
+		         public void actionPerformed(ActionEvent event) {
+		        	 //some code for friend request if not already friend otherwise dialog "already friends"
+			            JOptionPane.showMessageDialog(panel, "Friend Request sent!");
+		        	}
+		    };
 		
 		/**
 		 * A listener that implements the ActionListener class and 
@@ -518,6 +691,9 @@ public class GUI extends JFrame
 		ActionListener lastListener = new LastListener();
 		ActionListener emailListener = new EmailListener();
 		ActionListener submitListener = new SubmitListener();
+		ActionListener searchSubmitListener = new SearchSubmitListener();
+		ActionListener connectionSearchListener = new ConnectionSearchListener();
+		ActionListener friendRequestListener = new FriendRequestListener();
 		ActionListener logInListener = new LogInListener();
 		
 		UserID = new JLabel("User ID: ");
@@ -542,11 +718,30 @@ public class GUI extends JFrame
 		ConfirmPassword = new JLabel("Confirm Password: ");
 		ConfirmPasswordField = new JPasswordField(WIDTH);
 		
+		CurrentPassword = new JLabel("Current Password: ");
+		CurrentPasswordField = new JPasswordField(WIDTH);
+		
 		submitButton = new JButton("Submit");
 		submitButton.addActionListener(submitListener);
 		
+		Search = new JLabel("Search: ");
+		SearchField = new JTextField(WIDTH);
+		
+		searchSubmitButton = new JButton("Submit");
+		searchSubmitButton.addActionListener(searchSubmitListener);
+		
+		Connection = new JLabel("Connection Search");
+		ConnectionField = new JTextField(WIDTH);
+		
+		ConnectionSearchButton = new JButton("Submit");
+		ConnectionSearchButton.addActionListener(connectionSearchListener);
+		
+		FriendRequestButton = new JButton("Friend Request");
+		FriendRequestButton.addActionListener(friendRequestListener);
+		
 		logInButton = new JButton("Log In");
 		logInButton.addActionListener(logInListener);
+		
 	}
 	
 	/**
@@ -556,12 +751,12 @@ public class GUI extends JFrame
 	 */
 	public JPanel createRadioButtons()
 	{
-		ActionListener listener = new ButtonListener();
+		ActionListener buttonListener = new ButtonListener();
 		accountCreation = new JRadioButton("Account Creation");
-		accountCreation.addActionListener(listener);
+		accountCreation.addActionListener(buttonListener);
 		
 		logIn = new JRadioButton("Log In");
-		logIn.addActionListener(listener);
+		logIn.addActionListener(buttonListener);
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(accountCreation);
@@ -606,8 +801,8 @@ public class GUI extends JFrame
 	{
 		JMenu menu = new JMenu("File");
 		JMenuItem exitItem = new JMenuItem("Exit");
-		ActionListener listener = new ExitItemListener();
-		exitItem.addActionListener(listener);
+		ActionListener exitItemListener = new ExitItemListener();
+		exitItem.addActionListener(exitItemListener);
 		menu.add(exitItem);
 		return menu;
 	}
