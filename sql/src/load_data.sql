@@ -11,8 +11,8 @@ FROM 'educational_details.csv'
 WITH DELIMITER ',' CSV;
 
 COPY MESSAGE
-FROM 'message.csv'
-WITH DELIMITER ',' CSV;
+FROM 'data/message.csv'
+WITH DELIMITER ',' CSV HEADER;
 
 COPY CONNECTION_USR
 FROM 'connection_usr.csv'
