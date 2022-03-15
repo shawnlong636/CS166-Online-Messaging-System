@@ -264,11 +264,8 @@ public class ProfNetwork {
     **/
 public List<String> FriendList(String user){
    try{
-      // TODO: IMPLEMENT ME
-
-      List<String> friends = new ArrayList<String>();
-
-      return friends;
+      String query = String.format("SELECT connectionid FROM connetion_usr WHERE status = 'Accept' AND userid = '%s';", user);
+      return executeQueryAndReturnResult(query);
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
