@@ -167,7 +167,7 @@ public class CommandLineDriver {
       }
 
       System.out.print("Please enter new password: ")
-      String passwordAttempt1 = in.next();
+      String passwordAttempt1 = in.next(
       System.out.print("Confirm password: ")
       String passwordAttempt2 = in.next();
 
