@@ -155,10 +155,40 @@ public class CommandLineDriver {
         }
     }
 
-    public static void ChangePassword(ProfNetwork esql, String username) {
-        // TODO: IMPLEMENT ME
-        System.out.println("DUMMY PASSWORD CHANGED");
-    }
+   public static void ChangePassword(ProfNetwork esql, String username) {
+      System.out.print("Please enter current password: ")
+      String curr_password = in.next();
+      while (esql.LogIn(username, curr_password)) {
+         System.out.printl("Login Failed. Enter new Password or press enter to cancel: ")
+         curr_password = in.next();
+         if (curr_password == "") {
+            return;
+         }
+      }
+
+      System.out.print("Please enter new password: ")
+      String passwordAttempt1 = in.next();
+      System.out.print("Confirm password: ")
+      String passwordAttempt2 = in.next();
+
+      while (passwordAttempt1 != passwordAttempt2) {
+         System.out.println("Passwords do not match. Please try again. To cancel, leave blank.")
+         System.out.print("Please enter new password: ")
+         String passwordAttempt1 = in.next();
+
+         if (passwordAttempt1 == "") {
+            return;
+         }
+
+         System.out.print("Confirm password: ")
+         String passwordAttempt2 = in.next();
+
+         if (passwordAttempt2 == "") {
+            return;
+         }
+      }
+      esql.ChangePassword(username, passwordAttempt1);
+   }
 
     public static void NewMessage(ProfNetwork esql, String username) {
         // TODO: IMPLEMENT ME
