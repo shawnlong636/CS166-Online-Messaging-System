@@ -225,13 +225,8 @@ public class ProfNetwork {
          //Creating empty contact\block lists for a user
          String query = String.format("INSERT INTO USR (userId, password, email) VALUES ('%s','%s','%s')", login, password, email);
 
-         boolean succeeded = this.executeUpdate(query);
-
-         if (succeeded) {
-            System.out.println("User successfully created!");
-         } else {
-            System.err.println("Unable to create user.")
-         }
+         this.executeUpdate(query);
+         System.out.println("User successfully created!");
 
          return succeeded;
 
