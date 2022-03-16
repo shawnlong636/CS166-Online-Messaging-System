@@ -266,13 +266,8 @@ public class ProfNetwork {
     **/
 public List<String> FriendList(String user){
    try{
-      
-      // select userA from FRIENDS WHERE userB = 'Emily' UNION select userB from FRIENDS WHERE userA = 'Emily';
-
       String query = String.format("SELECT userA FROM FRIENDS WHERE userB = '%s'", user)
                    + String.format("UNION SELECT userB FROM FRIENDS WHERE userA = '%s';", user);
-      // String query = String.format("SELECT connectionid FROM connection_usr WHERE status = 'Accept' AND userid = '%s';", user);
-
 
       List<List<String> > queryResponse = executeQueryAndReturnResult(query);
       return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
