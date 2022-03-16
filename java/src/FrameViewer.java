@@ -15,7 +15,12 @@ import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
 /**
-This program uses a menu to display font effects.
+ * James Liem and Shawn Long 
+ * CS166 Final Project
+ * 3/13/2022
+ * This program uses a menu to display a Frame with a GUI system contained within.
+ * The program is an Online Messaging System that has basic features such as messaging,
+ * sending/receiving friend requests, searching users, and changing an account password.
 */
 public class FrameViewer
 {
