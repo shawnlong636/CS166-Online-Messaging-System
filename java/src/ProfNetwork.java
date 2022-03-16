@@ -228,7 +228,7 @@ public class ProfNetwork {
          this.executeUpdate(query);
          System.out.println("User successfully created!");
 
-         return succeeded;
+         return true;
 
       }catch(Exception e){
          System.err.println (e.getMessage ());
