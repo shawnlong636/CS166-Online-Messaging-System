@@ -223,12 +223,12 @@ public class ProfNetwork {
       try{
 
          //Creating empty contact\block lists for a user
-         String query = String.format("INSERT INTO USR (userId, password, email, contact_list) VALUES ('%s','%s','%s')", login, password, email);
+         String query = String.format("INSERT INTO USR (userId, password, email) VALUES ('%s','%s','%s')", login, password, email);
 
          this.executeUpdate(query);
-         System.out.println ("User successfully created!");
+         System.out.println("User successfully created!");
 
-         return true;
+         return succeeded;
 
       }catch(Exception e){
          System.err.println (e.getMessage ());
