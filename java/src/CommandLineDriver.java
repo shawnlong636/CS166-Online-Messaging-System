@@ -159,14 +159,14 @@ public class CommandLineDriver {
       System.out.print("Please enter current password: ");
       String curr_password = in.next();
       while (esql.LogIn(username, curr_password)) {
-         System.out.printl("Login Failed. Enter new Password or type 'cancel' to cancel: ");
+         System.out.println("Login Failed. Enter new Password or type 'cancel' to cancel: ");
          curr_password = in.next();
          if (curr_password == "cancel") {
             return;
          }
       }
 
-      System.out.print("Please enter new password: ")
+      System.out.print("Please enter new password: ");
       String passwordAttempt1 = in.next();
       System.out.print("Confirm password: ");
       String passwordAttempt2 = in.next();
@@ -174,14 +174,14 @@ public class CommandLineDriver {
       while (passwordAttempt1 != passwordAttempt2) {
          System.out.println("Passwords do not match. Please try again. To cancel, type 'cancel'.");
          System.out.print("Please enter new password: ");
-         String passwordAttempt1 = in.next();
+         passwordAttempt1 = in.next();
 
          if (passwordAttempt1 == "cancel") {
             return;
          }
 
          System.out.print("Confirm password: ");
-         String passwordAttempt2 = in.next();
+         passwordAttempt2 = in.next();
 
          if (passwordAttempt2 == "cancel") {
             return;
