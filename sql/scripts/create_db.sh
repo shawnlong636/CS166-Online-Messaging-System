@@ -7,4 +7,5 @@ cp $DIR/../../data/*.csv /tmp/$USER/myDB/data/
 
 psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/create_tables.sql
 psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/create_indexes.sql
+psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/create_triggers.sql
 psql -h localhost -p $PGPORT $DB_NAME < $DIR/../src/load_data.sql
