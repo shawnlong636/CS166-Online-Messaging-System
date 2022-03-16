@@ -137,10 +137,9 @@ public class CommandLineDriver {
       String password = in.next();
 
       boolean succeeded = esql.LogIn(login, password);
-      succeeded = true; // For testing only
 
       if (succeeded) {
-         System.out.println("DUMMY LOGIN SUCCEEDED");
+         System.out.println("Login succeeded!");
          return login;
       } else {
          System.out.println("Login failed.");
@@ -158,10 +157,10 @@ public class CommandLineDriver {
    public static void ChangePassword(ProfNetwork esql, String username) {
       System.out.print("Please enter current password: ");
       String curr_password = in.next();
-      while (esql.LogIn(username, curr_password)) {
-         System.out.println("Login Failed. Enter new Password or type 'cancel' to cancel: ");
+      while (!esql.LogIn(username, curr_password)) {
+         System.out.print("Login Failed. Enter new Password or type 'cancel' to cancel: ");
          curr_password = in.next();
-         if (curr_password == "cancel") {
+         if (curr_password.equals("cancel")) {
             return;
          }
       }
@@ -171,23 +170,24 @@ public class CommandLineDriver {
       System.out.print("Confirm password: ");
       String passwordAttempt2 = in.next();
 
-      while (passwordAttempt1 != passwordAttempt2) {
+      while (!passwordAttempt1.equals(passwordAttempt2)) {
          System.out.println("Passwords do not match. Please try again. To cancel, type 'cancel'.");
          System.out.print("Please enter new password: ");
          passwordAttempt1 = in.next();
 
-         if (passwordAttempt1 == "cancel") {
+         if (passwordAttempt1.equals("cancel")) {
             return;
          }
 
          System.out.print("Confirm password: ");
          passwordAttempt2 = in.next();
 
-         if (passwordAttempt2 == "cancel") {
+         if (passwordAttempt2.equals("cancel")) {
             return;
          }
       }
       esql.ChangePassword(username, passwordAttempt1);
+      System.out.println("Password Updated");
    }
     public static void NewMessage(ProfNetwork esql, String username) {
         // TODO: IMPLEMENT ME

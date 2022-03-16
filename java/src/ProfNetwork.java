@@ -283,7 +283,7 @@ public List<String> FriendList(String user){
 public boolean ChangePassword(String user, String password){
    try{
 
-      String query = String.format("UPDATE USR SET password = '%s' WHERE userid = '%s'", user, password);
+      String query = String.format("UPDATE USR SET password = '%s' WHERE userid = '%s';", password, user);
       this.executeUpdate(query);
 
       return true;
