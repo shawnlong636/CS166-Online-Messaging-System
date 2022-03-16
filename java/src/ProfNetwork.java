@@ -277,12 +277,15 @@ public List<String> FriendList(String user){
 }
 
  /*
-    * 
-    * TODO: WRITE DESCRIPTION
+    * This is is a simple function which performans an update
+    * on the user table. If the update fails, it returns false.
     **/
 public boolean ChangePassword(String user, String password){
    try{
-      // TODO: IMPLEMENT ME
+
+      String query = String.format("UPDATE USR SET password = '%s' WHERE userid = '%s';", password, user);
+      this.executeUpdate(query);
+
       return true;
 
    } catch (Exception e) {
