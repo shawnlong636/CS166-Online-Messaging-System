@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.*;
+import java.util.Collection;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -264,8 +266,24 @@ public class ProfNetwork {
     **/
 public List<String> FriendList(String user){
    try{
-      String query = String.format("SELECT connectionid FROM connetion_usr WHERE status = 'Accept' AND userid = '%s';", user);
-      return executeQueryAndReturnResult(query);
+      String query = String.format("SELECT connectionid FROM connection_usr WHERE status = 'Accept' AND userid = '%s';", user);
+
+      List<List<String> > queryResponse = executeQueryAndReturnResult(query);
+      // int bigIndex = 0;
+      // int smallIndex = 0;
+      // for (List<String> str_list : str) {
+      //    smallIndex = 0;
+      //    System.out.println("OUTER LIST: " + bigIndex);
+      //    for (String actual_str : str_list) {
+      //       System.out.println("INNER LIST: " + smallIndex);
+      //       System.out.println(actual_str);
+      //       smallIndex = smallIndex + 1;
+      //    }
+      //    bigIndex = bigIndex + 1;
+      // }
+
+
+      return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());

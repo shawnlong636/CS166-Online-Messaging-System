@@ -147,12 +147,20 @@ public class CommandLineDriver {
       }
    }
 
-    public static void FriendList(ProfNetwork esql, String username) {
-        // TODO: IMPLEMENT ME
-        for (int i = 0; i < 3; i++) {
-           System.out.printf("Fake Friend %d%n", i);
-        }
-    }
+   public static void FriendList(ProfNetwork esql, String username) {
+      List<String> friends = esql.FriendList(username);
+      if (friends.size() == 0) {
+         System.out.println("\nYou haven't added any friends yet. Try sending them a request!\n");
+      } else {
+         System.out.println("\nFriends List:");
+
+         for (String friend : friends) {
+            System.out.println("\t - " + friend);
+         }
+         System.out.println();
+      }
+      
+   }
 
    public static void ChangePassword(ProfNetwork esql, String username) {
       System.out.print("Please enter current password: ");
