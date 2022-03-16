@@ -317,7 +317,7 @@ public boolean NewMessage(String user, String recipient, String message){
     **/
 public boolean SendRequest(String user, String requestedUser){
    try{
-      // TODO: IMPLEMENT ME
+
       return true;
 
    } catch (Exception e) {
