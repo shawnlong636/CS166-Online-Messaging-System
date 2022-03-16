@@ -269,20 +269,6 @@ public List<String> FriendList(String user){
       String query = String.format("SELECT connectionid FROM connection_usr WHERE status = 'Accept' AND userid = '%s';", user);
 
       List<List<String> > queryResponse = executeQueryAndReturnResult(query);
-      // int bigIndex = 0;
-      // int smallIndex = 0;
-      // for (List<String> str_list : str) {
-      //    smallIndex = 0;
-      //    System.out.println("OUTER LIST: " + bigIndex);
-      //    for (String actual_str : str_list) {
-      //       System.out.println("INNER LIST: " + smallIndex);
-      //       System.out.println(actual_str);
-      //       smallIndex = smallIndex + 1;
-      //    }
-      //    bigIndex = bigIndex + 1;
-      // }
-
-
       return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
 
    } catch (Exception e) {
