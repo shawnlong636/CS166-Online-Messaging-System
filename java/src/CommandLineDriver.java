@@ -233,8 +233,6 @@ public class CommandLineDriver {
          }
       }
 
-      System.out.println("Valid User");
-
       // CHECK IF ALREADY A FRIEND
       if (esql.checkFriends(username, recipient)) {
          System.out.println(String.format("You are already friends with %s!\n",recipient));
@@ -254,11 +252,12 @@ public class CommandLineDriver {
       List<String> requestedMe = esql.getRequested(username);
       List<String> imRequesting = esql.getRequesting(username);
 
+      // PRINT LISTS OF PPL REQUESTIN CUR USER / PPL WHO REQUESTED CUR USER
       if (requestedMe.size() == 0 && imRequesting.size() == 0) {
          System.out.println("You have no requests at this time.\n");
       } else if (requestedMe.size() == 0) {
          // Has Requesting only
-         System.out.println("You have sent the following pending requests: ");
+         System.out.println("You sent the following pending requests: ");
          for (String user : imRequesting) {
             System.out.println("\t - " + user);
          }
@@ -270,13 +269,116 @@ public class CommandLineDriver {
          }
       } else {
          // Has Requsts and Requesting
-         System.out.println("You have sent the following pending requests: ");
+         System.out.println("You have been sent the following pending requests: ");
          for (String user : requestedMe) {
             System.out.println("\t - " + user);
          }
-         System.out.println("You have been sent the following requests: ");
+         System.out.println("You sent the following requests: ");
          for (String user : imRequesting) {
             System.out.println("\t - " + user);
+         }
+      }
+      System.out.println();
+
+      // OPTIONS FOR ACCEPTING / DENYING PEOPLE WHO REQUESTED CUR USER
+      if (requestedMe.size() > 0) {
+         System.out.print("Would you like to Accept/Deny any requests? (y/n): ");
+         String response = in.next();
+         
+         while (!response.equals("y") && !response.equals("n")) {
+            System.out.print("You entered an invalid response. Try again: ");
+            response = in.next();
+         }
+
+         boolean ContinueRequests = (response.equals("y"));
+
+         String name;
+         String decision;
+
+         while (ContinueRequests) {
+            System.out.print("Enter a name: ");
+            name = in.next();
+
+            while (!esql.userExists(name)) {
+               System.out.println("The specified user does not exist. Please try again.");
+               System.out.print("Enter a name or 'cancel': ");
+               name = in.next();
+               if (name.equals("cancel")) {
+                  return;
+               }
+            }
+
+            System.out.print("Accept or Deny? (a/d): ");
+            decision = in.next();
+            
+            if (decision.equals("a")) {
+               esql.acceptRequest(username, name);
+            } else if (decision.equals("d")) {
+               esql.denyRequest(username, name);
+            } else if (decision.equals("cancel")) {
+               return;
+            } else {
+               System.out.println("Invalid Input. Please try again or type 'cancel'.");
+            }
+
+            requestedMe = esql.getRequested(username);
+            if (requestedMe.size() > 0) {
+               System.out.println("Continue? (y/n): ");
+               response = in.next();
+
+               while (!response.equals("y") && !response.equals("n")) {
+                  System.out.print("You entered an invalid response. Try again: ");
+                  response = in.next();
+               }
+               ContinueRequests = (response.equals("y"));
+            } else {
+               ContinueRequests = false;
+            }
+         }
+      }
+      // OPTIONS FOR WITHDRAWING REQUESTS SENT BY CUR USER
+      if (imRequesting.size() > 0) {
+         System.out.print("Would you like to Withdraw any requests? (y/n): ");
+         String response = in.next();
+         
+         while (!response.equals("y") && !response.equals("n")) {
+            System.out.print("You entered an invalid response. Try again: ");
+            response = in.next();
+         }
+
+         boolean ContinueRequests = (response.equals("y"));
+
+         String name;
+         String decision;
+
+         while (ContinueRequests) {
+            System.out.print("Enter a name: ");
+            name = in.next();
+
+            while (!esql.userExists(name)) {
+               System.out.println("The specified user does not exist. Please try again.");
+               System.out.print("Enter a name or 'cancel': ");
+               name = in.next();
+               if (name.equals("cancel")) {
+                  return;
+               }
+            }
+            esql.withdrawRequest(username, name);
+
+            imRequesting = esql.getRequesting(username);
+
+            if (imRequesting.size() > 0) {
+               System.out.println("Continue? (y/n): ");
+               response = in.next();
+
+               while (!response.equals("y") && !response.equals("n")) {
+                  System.out.print("You entered an invalid response. Try again: ");
+                  response = in.next();
+               }
+               ContinueRequests = (response.equals("y"));
+            } else {
+               ContinueRequests = false;
+            }
          }
       }
       System.out.println();
