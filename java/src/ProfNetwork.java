@@ -421,4 +421,71 @@ public boolean checkRequest(String user1, String user2) {
    }
 }
 
+public List<String> getRequested(String username) {
+   try{
+      String requested = String.format("SELECT userId FROM REQUESTS WHERE connectionId = '%s';", username);
+
+      List<List<String> > requestedResponse = executeQueryAndReturnResult(requested);
+      return requestedResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+public List<String> getRequesting(String username) {
+   try{
+      String requested = String.format("SELECT connectionId FROM REQUESTS WHERE userId = '%s';", username);
+
+      List<List<String> > requestedResponse = executeQueryAndReturnResult(requested);
+      return requestedResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+public boolean acceptRequest(String username, String otherUser) {
+   try {
+      System.out.println("ACCEPTING REQUEST");
+      this.SendRequest(username, otherUser);
+      return true;
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
+public boolean denyRequest(String username, String otherUser) {
+   try {
+      if (this.checkRequest(otherUser, username)) {
+         String deleteReq = String.format("DELETE FROM REQUESTS WHERE userId = '%s' AND connectionId = '%s';", otherUser, username);
+         this.executeUpdate(deleteReq);
+         return true;
+      }
+      return false;
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
+public boolean withdrawRequest(String username, String otherUser) {
+   try {
+      if (this.checkRequest(username, otherUser)) {
+         String deleteReq = String.format("DELETE FROM REQUESTS WHERE userId = '%s' AND connectionId = '%s';", username, otherUser);
+         this.executeUpdate(deleteReq);
+         return true;
+      }
+      return false;
+      
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
 }//end ProfNetwork
