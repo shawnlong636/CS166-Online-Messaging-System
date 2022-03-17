@@ -421,4 +421,30 @@ public boolean checkRequest(String user1, String user2) {
    }
 }
 
+public List<String> getRequested(String username) {
+   try{
+      String requested = String.format("SELECT userId FROM REQUESTS WHERE connectionId = '%s';", username);
+
+      List<List<String> > requestedResponse = executeQueryAndReturnResult(requested);
+      return requestedResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+public List<String> getRequesting(String username) {
+   try{
+      String requested = String.format("SELECT connectionId FROM REQUESTS WHERE userId = '%s';", username);
+
+      List<List<String> > requestedResponse = executeQueryAndReturnResult(requested);
+      return requestedResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
 }//end ProfNetwork

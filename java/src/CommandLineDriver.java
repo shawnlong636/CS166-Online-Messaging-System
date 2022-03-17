@@ -58,6 +58,7 @@ public class CommandLineDriver {
                 System.out.println("2. Change Password");
                 System.out.println("3. Write a new message");
                 System.out.println("4. Send Friend Request");
+                System.out.println("5. View Requests");
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
@@ -65,6 +66,7 @@ public class CommandLineDriver {
                    case 2: ChangePassword(esql, currentUser); break;
                    case 3: NewMessage(esql, currentUser); break;
                    case 4: SendRequest(esql, currentUser); break;
+                   case 5: viewRequests(esql, currentUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -248,5 +250,37 @@ public class CommandLineDriver {
       esql.SendRequest(username, recipient);
 
    }
+   public static void viewRequests(ProfNetwork esql, String username) {
+      List<String> requestedMe = esql.getRequested(username);
+      List<String> imRequesting = esql.getRequesting(username);
+
+      if (requestedMe.size() == 0 && imRequesting.size() == 0) {
+         System.out.println("You have no requests at this time.\n");
+      } else if (requestedMe.size() == 0) {
+         // Has Requesting only
+         System.out.println("You have sent the following pending requests: ");
+         for (String user : imRequesting) {
+            System.out.println("\t - " + user);
+         }
+      } else if (imRequesting.size() == 0) {
+         // Has Requested only
+         System.out.println("You have been sent the following requests: ");
+         for (String user : requestedMe) {
+            System.out.println("\t - " + user);
+         }
+      } else {
+         // Has Requsts and Requesting
+         System.out.println("You have sent the following pending requests: ");
+         for (String user : requestedMe) {
+            System.out.println("\t - " + user);
+         }
+         System.out.println("You have been sent the following requests: ");
+         for (String user : imRequesting) {
+            System.out.println("\t - " + user);
+         }
+      }
+      System.out.println();
+   }
 }
+
 
