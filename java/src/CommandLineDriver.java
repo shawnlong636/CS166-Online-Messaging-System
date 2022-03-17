@@ -202,9 +202,51 @@ public class CommandLineDriver {
         System.out.println("SENDING FAKE MESSAGE");
     }
 
-    public static void SendRequest(ProfNetwork esql, String username) {
-        // TODO: IMPLEMENT ME
-        System.out.println("SENDING FAKE FRIEND REQUEST");
-    }
+   public static void SendRequest(ProfNetwork esql, String username) {
+      System.out.print("Please enter your friend's username: ");
+      String recipient = in.next();
+
+      // CONFIRM THAT USER IS VALID OTHER USER
+      boolean validUser = true;
+
+      if (recipient.equals(username) || !esql.userExists(recipient)) {
+         validUser = false;
+      }
+
+      while (!validUser) {
+         validUser = true;
+
+         if (recipient.equals(username)) {
+         System.out.println("You must enter a different user than yourself");
+         System.out.print("Please try again or type 'cancel' to cancel: ");
+         recipient = in.next();
+         validUser = false;
+         }
+
+         if (!esql.userExists(recipient)) {
+            System.out.println("The specified user doesn't exist.");
+            System.out.print("Please try again or type 'cancel' to cancel: ");
+            recipient = in.next();
+            validUser = false;
+         }
+      }
+
+      System.out.println("Valid User");
+
+      // CHECK IF ALREADY A FRIEND
+      if (esql.checkFriends(username, recipient)) {
+         System.out.println(String.format("You are already friends with %s!\n",recipient));
+         return;
+      }
+
+      // CHECK CONNECTIONS <= 3
+      if (!esql.canConnect(username, recipient)) {
+         System.out.println(String.format("You don't have enough connections with %s to add them!\n", recipient));
+         return;
+      }
+
+      esql.SendRequest(username, recipient);
+
+   }
 }
 

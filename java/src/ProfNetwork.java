@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.*;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.HashMap;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -246,12 +249,7 @@ public class ProfNetwork {
    public boolean LogIn(String login, String password){
       try{
          String query = String.format("SELECT * FROM USR WHERE userId = '%s' AND password = '%s'", login, password);
-         int userNum = this.executeQuery(query);
-         if (userNum > 0) {
-            return true;
-         } else {
-            return false;
-         }
+         return (this.executeQuery(query) > 0);
       }catch(Exception e){
          System.err.println (e.getMessage ());
          return false;
@@ -266,7 +264,8 @@ public class ProfNetwork {
     **/
 public List<String> FriendList(String user){
    try{
-      String query = String.format("SELECT connectionid FROM connection_usr WHERE status = 'Accept' AND userid = '%s';", user);
+      String query = String.format("SELECT userA FROM FRIENDS WHERE userB = '%s'", user)
+                   + String.format("UNION SELECT userB FROM FRIENDS WHERE userA = '%s';", user);
 
       List<List<String> > queryResponse = executeQueryAndReturnResult(query);
       return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
@@ -317,11 +316,107 @@ public boolean NewMessage(String user, String recipient, String message){
     **/
 public boolean SendRequest(String user, String requestedUser){
    try{
-      // TODO: IMPLEMENT ME
+
+      // CHECK IF REQUEST (USER -> RECIPIENT) ALREADY EXISTS
+      if (this.checkRequest(user, requestedUser)) {
+         // DO NOTHING SINCE REQUEST ALREADY SUBMITTED
+         return true;
+      }
+
+      // CHECK IF REQUEST (RECIPIENT -> USER) EXISTS
+      if (this.checkRequest(requestedUser, user)) {
+         // IF SO: DELETE REQUEST, INSERT FRIEND
+         String deleteRequest = String.format("DELETE FROM REQUESTS WHERE userId = '%s' AND connectionId = '%s';", requestedUser, user);
+         String insertFriend = String.format("INSERT INTO FRIENDS (userA, userB) VALUES ('%s', '%s');", user, requestedUser);
+         this.executeUpdate(deleteRequest);
+         this.executeUpdate(insertFriend);
+      } else {
+         // IF NOT: ADD REQUEST
+         String insertRequest = String.format("INSERT INTO REQUESTS (userId, connectionId) VALUES ('%s', '%s');", user, requestedUser);
+         this.executeUpdate(insertRequest);
+      }
+
       return true;
 
    } catch (Exception e) {
       System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
+ /*
+    * This method checks if the two users can connect. The constraint
+    * is that if the user has less than 5 friends, they can add anyone
+    * but if they have 5 or more, they can only add someone with a
+    * connection level of at most 3. This is done by running BFS
+    * and getting the min distance between the two users. If a 
+    * path of 3 or less exists between the two, the request can
+    * be submitted.
+    * 
+    **/
+public boolean canConnect(String user1, String user2) {
+   List<String> user1Friends = this.FriendList(user1);
+   if (user1Friends.size() < 5) {
+      return true;
+   }
+
+   HashSet<String> visited = new HashSet<String>();
+   HashMap<String, Integer> distances = new HashMap<String, Integer>();
+   LinkedList<String> queue = new LinkedList<String>();
+   queue.add(user1);
+   distances.put(user1,0);
+
+   String curUser = "";
+   List<String> friends = null;
+   int curDistance;
+   while (!queue.isEmpty() && !distances.containsKey(user2)) {
+      curUser = queue.remove();
+      curDistance = distances.get(curUser);
+      if (!visited.contains(curUser) && curDistance < 3) {
+         visited.add(curUser);
+         friends = this.FriendList(curUser);
+         for (String friend : friends) {
+            if (!visited.contains(friend)) {
+               queue.add(friend);
+               distances.put(friend, curDistance + 1);
+            }
+         }
+      }
+   }
+   Integer value = distances.get(user2);
+   System.out.println(String.format("Distance from %s to %s is %d", user1, user2, value));
+
+   return !(value == null);
+}
+
+public boolean userExists(String user) {
+   try{
+      String query = String.format("SELECT * FROM USR WHERE userId = '%s'", user);
+      return (this.executeQuery(query) > 0);
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+public boolean checkFriends(String user1, String user2) {
+   try {
+      String query = String.format("SELECT * FROM FRIENDS WHERE (userA = '%s' AND userB = '%s')", user1, user2)
+                   + String.format("OR  (userB = '%s' AND userA = '%s');", user1, user2);
+
+      return (this.executeQuery(query) > 0);
+
+   } catch (Exception e) {
+      System.err.println(e.getMessage ());
+      return false;
+   }
+}
+
+public boolean checkRequest(String user1, String user2) {
+   try {
+      String query = String.format("SELECT * FROM REQUESTS WHERE userId = '%s' AND connectionId = '%s';", user1, user2);
+      return (this.executeQuery(query) > 0);
+   } catch (Exception e) {
+      System.err.println(e.getMessage ());
       return false;
    }
 }
