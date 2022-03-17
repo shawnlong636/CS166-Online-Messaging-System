@@ -55,18 +55,22 @@ public class CommandLineDriver {
                 System.out.println("MAIN MENU");
                 System.out.println("---------");
                 System.out.println("1. Goto Friend List");
-                System.out.println("2. Change Password");
+                System.out.println("2. View Profile");
                 System.out.println("3. Write a new message");
                 System.out.println("4. Send Friend Request");
                 System.out.println("5. View Requests");
+                System.out.println("6. Explore Friends' Profiles");
+                System.out.println("7. Search for a Friend");
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
                    case 1: FriendList(esql, currentUser); break;
-                   case 2: ChangePassword(esql, currentUser); break;
+                   case 2: currentUser = ViewProfile(esql, currentUser); break;
                    case 3: NewMessage(esql, currentUser); break;
                    case 4: SendRequest(esql, currentUser); break;
                    case 5: viewRequests(esql, currentUser); break;
+                   case 6: friendsProfiles(esql, currentUser); break;
+                   case 7: searchProfiles(esql, currentUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -383,6 +387,118 @@ public class CommandLineDriver {
       }
       System.out.println();
    }
+
+   public static String ViewProfile(ProfNetwork esql, String username) {
+      // VIEW PROFILE
+      System.out.println("PROFILE: " + username);
+      System.out.println("==============================");
+      List<String> attributes = esql.getProfile(username);
+
+      System.out.println("Password: **********");
+      System.out.println("Email: " + attributes.get(2));
+      System.out.println("Name: " + attributes.get(3));
+      System.out.println("Birth Date: " + attributes.get(4));
+      System.out.println();
+
+      // UPDATE PROFILE
+      System.out.print("Update profile? (y/n): ");
+      boolean continueUpdating = true;
+      String response = in.next();
+
+      while (!response.equals("y") && !response.equals("n")) {
+            System.out.print("You entered an invalid response. Try again: ");
+            response = in.next();
+         }
+      
+      continueUpdating = (response.equals("y"));
+      int option;
+      String value = "";
+      while (continueUpdating) {
+         System.out.println("1. Password");
+         System.out.println("2. Email");
+         System.out.println("3. Name");
+         System.out.println("4. Birth Date");
+         System.out.println("5. User Name");
+         System.out.println("9. Cancel");
+         System.out.print("Select an option: ");
+         option = readChoice();
+         if (option != 9 && option != 1) {
+            System.out.print("Enter new value (without spaces): ");
+            value = in.next();
+         }
+
+         switch (option){
+            case 1: ChangePassword(esql, username); break;
+            case 2: esql.updateProfile(username, "email", value); break;
+            case 3: esql.updateProfile(username, "name", value); break;
+            case 4: esql.updateProfile(username, "dateOfBirth", value); break;
+            case 5: esql.updateProfile(username, "userId", value); break;
+            case 9: return username;
+            default : System.out.println("Unrecognized choice!"); break;
+         }
+         if (option == 5) {
+            username = value;
+         }
+
+         System.out.print("Continue updating? (y/n): ");
+         response = in.next();
+
+         while (!response.equals("y") && !response.equals("n")) {
+                  System.out.print("You entered an invalid response. Try again: ");
+                  response = in.next();
+         }
+         continueUpdating = response.equals("y");
+
+      }
+      return username;
+   }
+
+   public static void friendsProfiles(ProfNetwork esql, String username) {
+      FriendList(esql, username);
+      System.out.print("Enter your friend's name to view their profile: ");
+      String friend = in.next();
+
+      while (!esql.userExists(friend) || !esql.checkFriends(username, friend)) {
+         if (!esql.userExists(friend)) {
+            System.out.println("The specified user doesn't exist.");
+            System.out.print("Please try again or type 'cancel' to cancel: ");
+            friend = in.next();
+            if (friend.equals("cancel")) {
+               return;
+            }
+         } else {
+            System.out.println(String.format("You haven't added %s as a friend yet.", friend));
+            System.out.print("Please try again or type 'cancel' to cancel: ");
+            friend = in.next();
+            if (friend.equals("cancel")) {
+               return;
+            }
+         }  
+      }
+
+      System.out.println("\nPROFILE: " + friend);
+      System.out.println("==============================");
+      List<String> attributes = esql.getProfile(friend);
+
+      System.out.println("Email: " + attributes.get(2));
+      System.out.println("Name: " + attributes.get(3));
+      System.out.println("Birth Date: " + attributes.get(4));
+      System.out.println();
+   }
+   public static void searchProfiles(ProfNetwork esql, String username) {
+      System.out.print("Enter a username: ");
+      String response = in.next();
+      List<String> users = esql.searchPeople(response);
+      
+      if (users.size() == 0) {
+         System.out.println("No results Found\n");
+      } else {
+         System.out.println("Top 10 Results: ");
+         for (String user: users) {
+            System.out.println("\t" + user);
+         }
+         System.out.println();
+      }
+      
+   }
 }
-
-

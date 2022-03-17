@@ -487,5 +487,43 @@ public boolean withdrawRequest(String username, String otherUser) {
       return false;
    }
 }
+public List<String> getProfile(String username) {
+   try{
+      String query = String.format("SELECT * FROM USR WHERE userId = '%s'", username);
+
+      List<List<String> > queryResponse = executeQueryAndReturnResult(query);
+      return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
+public boolean updateProfile(String username, String attribute, String value) {
+   try {
+      if (this.userExists(username)) {
+         String update = String.format("UPDATE USR SET %s = '%s' WHERE userId = '%s';", attribute, value, username);
+         this.executeUpdate(update);
+         return true;
+      }
+      return false;
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
+public List<String> searchPeople(String search_term) {
+   try {
+      String query = "SELECT userId FROM USR WHERE userId LIKE '%" + search_term + "%'"
+                   + " OR name LIKE '%" + search_term + "%' LIMIT 10;";
+      List<List<String> > queryResponse = executeQueryAndReturnResult(query);
+      return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
 
 }//end ProfNetwork
