@@ -60,6 +60,7 @@ public class CommandLineDriver {
                 System.out.println("4. Send Friend Request");
                 System.out.println("5. View Requests");
                 System.out.println("6. Explore Friends' Profiles");
+                System.out.println("7. Search for a Friend");
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
@@ -69,6 +70,7 @@ public class CommandLineDriver {
                    case 4: SendRequest(esql, currentUser); break;
                    case 5: viewRequests(esql, currentUser); break;
                    case 6: friendsProfiles(esql, currentUser); break;
+                   case 7: searchProfiles(esql, currentUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -482,5 +484,21 @@ public class CommandLineDriver {
       System.out.println("Name: " + attributes.get(3));
       System.out.println("Birth Date: " + attributes.get(4));
       System.out.println();
+   }
+   public static void searchProfiles(ProfNetwork esql, String username) {
+      System.out.print("Enter a username: ");
+      String response = in.next();
+      List<String> users = esql.searchPeople(response);
+      
+      if (users.size() == 0) {
+         System.out.println("No results Found\n");
+      } else {
+         System.out.println("Top 10 Results: ");
+         for (String user: users) {
+            System.out.println("\t" + user);
+         }
+         System.out.println();
+      }
+      
    }
 }

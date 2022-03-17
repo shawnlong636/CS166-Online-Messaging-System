@@ -513,4 +513,17 @@ public boolean updateProfile(String username, String attribute, String value) {
    }
 }
 
+public List<String> searchPeople(String search_term) {
+   try {
+      String query = "SELECT userId FROM USR WHERE userId LIKE '%" + search_term + "%'"
+                   + " OR name LIKE '%" + search_term + "%' LIMIT 10;";
+      List<List<String> > queryResponse = executeQueryAndReturnResult(query);
+      return queryResponse.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   }
+}
+
 }//end ProfNetwork
