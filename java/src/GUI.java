@@ -90,8 +90,8 @@ public class GUI extends JFrame
 		inputPanel = new JPanel();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		//createGUI();
-		userHomeGUI();
+		createGUI();
+		//userHomeGUI();
 	}
 	
 	/**
