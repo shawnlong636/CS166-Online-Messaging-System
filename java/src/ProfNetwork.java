@@ -609,4 +609,73 @@ public List<String> searchPeople(String search_term) {
    }
 }
 
+public List<String> getThread(String user1, String user2, int limit) {
+   try {
+      String query = String.format("SELECT senderId, contents, sendTime, status FROM MESSAGE ")
+                   + String.format("WHERE (senderId = '%s' AND receiverId = '%s') ", user1, user2)
+                   + String.format("OR  (receiverId = '%s' AND senderId = '%s') ", user1, user2)
+                   + String.format("ORDER BY msgId ASC LIMIT %d;", limit);
+
+      List<List<String> > query_response = executeQueryAndReturnResult(query);
+      List<String> return_query = query_response.stream().flatMap(Collection::stream).collect(Collectors.toList());
+      
+      String update = String.format("UPDATE MESSAGE SET status = 'Read' WHERE senderId = '%s' AND receiverId = '%s' AND status = 'Delivered';", user2, user1);
+      this.executeUpdate(update);
+
+      return return_query;
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   } 
+}
+
+public int getUnreadCount(String username) {
+   try {
+      String query = String.format("SELECT msgId FROM MESSAGE WHERE receiverId = '%s' AND status = 'Delivered';", username);
+      return executeQuery(query);
+   }
+
+   catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return 0;
+   }
+}
+
+public List<String> getUnreadMessages(String username) {
+   try {
+      String query = String.format("SELECT senderId, contents, sendTime FROM MESSAGE ")
+                   + String.format("WHERE receiverId = '%s' AND status = 'Delivered' ", username)
+                   + String.format("ORDER BY msgId ASC;");
+
+      List<List<String> > query_response = executeQueryAndReturnResult(query);
+      List<String> return_query = query_response.stream().flatMap(Collection::stream).collect(Collectors.toList());
+
+      String update = String.format("UPDATE MESSAGE SET status = 'Read' WHERE receiverId = '%s' AND status = 'Delivered';", username);
+
+      this.executeUpdate(update);
+
+      return return_query;
+
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return null;
+   } 
+}
+
+public boolean sendMessage(String sender, String receiver, String message) {
+   try {
+      if (this.userExists(sender) && this.userExists(receiver)) {
+         String insert = String.format("INSERT INTO MESSAGE (senderId, receiverId, contents, sendTime, status) ")
+                       + String.format("VALUES ('%s', '%s', '%s', CURRENT_TIMESTAMP, 'Delivered');", sender, receiver, message);
+         
+         this.executeUpdate(insert);
+         return true;
+      }
+      return false;
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
 }//end ProfNetwork

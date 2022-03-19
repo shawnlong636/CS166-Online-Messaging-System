@@ -13,33 +13,17 @@ CREATE TABLE USR(
 	dateOfBirth date,
 	Primary Key(userId));
 
-CREATE TABLE WORK_EXPR(
-	userId TEXT NOT NULL, 
-	company TEXT NOT NULL, 
-	role TEXT NOT NULL,
-	location TEXT,
-	startDate date,
-	endDate date,
-	PRIMARY KEY(userId,company,role,startDate));
-
-CREATE TABLE EDUCATIONAL_DETAILS(
-	userId TEXT NOT NULL, 
-	instituitionName TEXT NOT NULL, 
-	major TEXT NOT NULL,
-	degree TEXT NOT NULL,
-	startdate date,
-	enddate date,
-	PRIMARY KEY(userId,major,degree));
-
 CREATE TABLE MESSAGE(
 	msgId integer UNIQUE NOT NULL, 
 	senderId TEXT NOT NULL,
 	receiverId TEXT NOT NULL,
 	contents TEXT NOT NULL,
 	sendTime timestamp,
-	deleteStatus integer,
 	status TEXT NOT NULL,
-	PRIMARY KEY(msgId));
+	PRIMARY KEY(msgId),
+	FOREIGN KEY(senderId) REFERENCES USR(userId) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(receiverId) REFERENCES USR(userId) ON DELETE CASCADE ON UPDATE CASCADE
+	);
 
 CREATE TABLE FRIENDS(
 	userA TEXT NOT NULL,

@@ -1,0 +1,1 @@
+CREATE SEQUENCE message_id_seq START WITH 50000;

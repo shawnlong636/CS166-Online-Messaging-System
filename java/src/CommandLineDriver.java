@@ -58,7 +58,7 @@ public class CommandLineDriver {
                 System.out.println("---------");
                 System.out.println("1. Goto Friend List");
                 System.out.println("2. View Profile");
-                System.out.println("3. Write a new message");
+                System.out.println("3. View Messages");
                 System.out.println("4. Send Friend Request");
                 System.out.println("5. View Requests");
                 System.out.println("6. Explore Friends' Profiles");
@@ -68,7 +68,7 @@ public class CommandLineDriver {
                 switch (readChoice()){
                    case 1: FriendList(esql, currentUser); break;
                    case 2: currentUser = ViewProfile(esql, currentUser); break;
-                   case 3: NewMessage(esql, currentUser); break;
+                   case 3: viewMessages(esql, currentUser); break;
                    case 4: SendRequest(esql, currentUser); break;
                    case 5: viewRequests(esql, currentUser); break;
                    case 6: friendsProfiles(esql, currentUser); break;
@@ -228,16 +228,6 @@ public class CommandLineDriver {
       esql.ChangePassword(username, passwordAttempt1);
       System.out.println("Password Updated");
    }
-   
-   /*
-    * This is a static method which takes in the ProfNetwork object from main as well 
-    * as the username of the current user. This method which prompts for a user and a message 
-    * and then sends it by adding it to the database.
-    **/
-    public static void NewMessage(ProfNetwork esql, String username) {
-        // TODO: IMPLEMENT ME
-        System.out.println("SENDING FAKE MESSAGE");
-    }
 
     /*
      * This is a static method which takes in the ProfNetwork object from main as well 
@@ -264,12 +254,18 @@ public class CommandLineDriver {
          recipient = in.next();
          validUser = false;
          }
+         if (recipient.equals("cancel")) {
+            return;
+         }
 
          if (!esql.userExists(recipient)) {
             System.out.println("The specified user doesn't exist.");
             System.out.print("Please try again or type 'cancel' to cancel: ");
             recipient = in.next();
             validUser = false;
+         }
+         if (recipient.equals("cancel")) {
+            return;
          }
       }
 
@@ -558,5 +554,158 @@ public class CommandLineDriver {
          System.out.println();
       }
       
+   }
+   public static void viewMessages(ProfNetwork esql, String username) {
+      System.out.println("Messages: ");
+      System.out.println("==============================");
+
+      int numMessages = esql.getUnreadCount(username);
+      String response = "";
+
+      if (numMessages > 0) {
+         System.out.println("You have " + numMessages + " unread messages!");
+         System.out.print("Would you like to view them? (y/n): ");
+         response = in.next();
+         
+         while (!response.equals("y") && !response.equals("n")) {
+            System.out.print("You entered an invalid response. Try again: ");
+            response = in.next();
+         }
+
+         if (response.equals("y")) {
+            List<String> unreadMessages = esql.getUnreadMessages(username);
+            String senderId;
+            String contents;
+            String sendTime;
+            System.out.println();
+            for (int i = 0; i < unreadMessages.size() / 3; i += 1) {
+               senderId = unreadMessages.get(3*i);
+               contents = unreadMessages.get(3 * i + 1);
+               sendTime = unreadMessages.get(3 * i + 2);
+               System.out.println(String.format("(%s) %s : %s", sendTime, senderId, contents));
+            }
+         }
+      }
+
+     
+
+      System.out.println();
+      boolean messageLoop = true;
+
+      while (messageLoop) {
+
+         System.out.println("Please select a friend to message");
+         System.out.println("If you would like to see your friend list first, enter '/friends'");
+         System.out.print("Name: ");
+
+         String friendName = in.next();
+
+         if (friendName.equals("/friends")) {
+            FriendList(esql, username);
+            
+            System.out.print("\nPlease enter a user: ");
+            friendName = in.next();
+         }
+
+    
+
+         boolean validUser = true;
+
+         if (!esql.userExists(username) || !esql.checkFriends(username, friendName)) {
+            validUser = false;
+         }
+
+         while (!validUser) {
+            validUser = true;
+
+            if (!esql.userExists(friendName)) {
+               System.out.println("The specified user doesn't exist.");
+               System.out.print("Please try again or type 'cancel' to cancel: ");
+               friendName = in.next();
+               validUser = false;
+            }
+
+            if (friendName.equals("cancel")) {
+               return;
+            }
+
+            if (!esql.checkFriends(username, friendName)) {
+            System.out.println("You are not yet friends with " + friendName + ".");
+            System.out.print("Please try again or type 'cancel' to cancel: ");
+            friendName = in.next();
+            validUser = false;
+            }
+            if (friendName.equals("cancel")) {
+               return;
+            }
+         }
+
+         // Display Thread
+         messageLoop = displayThread(esql, username, friendName);
+
+         System.out.println();
+      }
+   }
+
+   public static boolean displayThread(ProfNetwork esql, String username, String friendName) {
+
+      int MessageLimit = 5;
+      
+      // Temp variables
+      String senderId;
+      String contents;
+      String sendTime;
+      String status;
+
+      while (true) {
+         List<String> thread = esql.getThread(username, friendName, MessageLimit);
+         boolean printedUnreadMessage = false;
+         System.out.println();
+         if (thread.size() == 0) {
+            System.out.println("This thread is empty. Why don't you say hello?");
+         } else {
+            System.out.println("==============================");
+            for (int i = 0; i < thread.size() / 4; i += 1) {
+               senderId = thread.get(4*i);
+               contents = thread.get(4 * i + 1);
+               sendTime = thread.get(4 * i + 2);
+               status = thread.get(4 * i + 3);
+
+               if (!printedUnreadMessage && !status.equals("Read") && senderId == friendName) {
+                  System.out.println("===== NEW MESSAGES BELOW =====");
+                  printedUnreadMessage = true;
+               }
+
+               System.out.println(String.format("(%s) %s : %s", sendTime, senderId, contents));
+            }
+            System.out.println("==============================");
+         }
+         System.out.println("\nOPTIONS: | 1. New Message | 2. Delete Last Message |");
+         System.out.println("         | 3. Refresh     | 4. Return    | 5. Exit |");
+         System.out.println();
+         int option = readChoice();
+
+         switch (option) {
+               case 1: receiveMessage(esql, username, friendName); break;
+               case 2: System.out.println("DELETING DUMMY MSG"); break;
+               case 3: break;
+               case 4: return true; // continue viewing messages
+               case 5: return false; // leave messages altogether
+               default : System.out.println("Unrecognized choice!"); break;
+         }
+      }
+   }
+   public static void receiveMessage(ProfNetwork esql, String sender, String receiver) {
+      System.out.println("Please Type your Message below.");
+      
+      String message = in.nextLine();
+      message = in.nextLine();
+      message = message.replace("'", "''");
+      
+      if (esql.sendMessage(sender, receiver, message)) {
+         System.out.println("Message Sent!");
+      } else {
+         System.out.println("Unable to send message!");
+      }
    }
 }
