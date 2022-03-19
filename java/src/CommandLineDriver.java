@@ -687,7 +687,7 @@ public class CommandLineDriver {
 
          switch (option) {
                case 1: receiveMessage(esql, username, friendName); break;
-               case 2: System.out.println("DELETING DUMMY MSG"); break;
+               case 2: esql.deleteLastMessage(username, friendName); break;
                case 3: break;
                case 4: return true; // continue viewing messages
                case 5: return false; // leave messages altogether
