@@ -609,6 +609,13 @@ public List<String> searchPeople(String search_term) {
    }
 }
 
+/** 
+ * This method gets the message data between two users
+ * @param one user in the database
+ * @param another user in the database
+ * @param limits the number of messages to pull from the database
+ * @return returns the messages between the two specified users
+ */
 public List<String> getThread(String user1, String user2, int limit) {
    try {
       String query = String.format("SELECT senderId, contents, sendTime, status FROM MESSAGE ")
@@ -629,6 +636,11 @@ public List<String> getThread(String user1, String user2, int limit) {
    } 
 }
 
+/** 
+ * This method obtains the amount of unread messages that the user has
+ * @param the user currently logged into the database
+ * @return returns an integer with the number of unread messages
+ */
 public int getUnreadCount(String username) {
    try {
       String query = String.format("SELECT msgId FROM MESSAGE WHERE receiverId = '%s' AND status = 'Delivered';", username);
@@ -641,6 +653,11 @@ public int getUnreadCount(String username) {
    }
 }
 
+/** 
+ * This method gets the data of unread messages that the user has
+ * @param the user currently logged into the database
+ * @return returns the unread messages that the user has in the database
+ */
 public List<String> getUnreadMessages(String username) {
    try {
       String query = String.format("SELECT senderId, contents, sendTime FROM MESSAGE ")
@@ -662,6 +679,13 @@ public List<String> getUnreadMessages(String username) {
    } 
 }
 
+/** 
+ * This method sends a message to another user in the database
+ * @param the sender of the message
+ * @param the receiver of the message
+ * @param the message that is being sent
+ * @return returns true if the message was successfully sent, false otherwise
+ */
 public boolean sendMessage(String sender, String receiver, String message) {
    try {
       if (this.userExists(sender) && this.userExists(receiver)) {
@@ -678,6 +702,12 @@ public boolean sendMessage(String sender, String receiver, String message) {
    }
 }
 
+/** 
+ * This method deletes the last message sent between two users
+ * @param the sender of the message
+ * @param the receiver of the message
+ * @return returns true if the message was successfully deleted, false otherwise
+ */
 public boolean deleteLastMessage(String sender, String receiver) {
    try {
       if (this.userExists(sender) && this.userExists(receiver)) {
