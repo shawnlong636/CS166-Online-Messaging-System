@@ -46,7 +46,9 @@ public class GUI extends JFrame
 	private JPanel inputPanel;
 	private JPanel outputPanel;
 	private JComboBox<String> options;
+	private JComboBox<String> friends;
 	private ActionListener listener;
+	private ActionListener friend;
 	private JPanel panel;
 	private JRadioButton accountCreation;
 	private JRadioButton logIn;
@@ -64,6 +66,7 @@ public class GUI extends JFrame
 	private JLabel Search;
 	private JTextField SearchField;
 	private JLabel Connection;
+	private JLabel Friends;
 	private JButton ConnectionSearchButton;
 	private JTextField ConnectionField;
 	private JPanel tasks;
@@ -154,7 +157,21 @@ public class GUI extends JFrame
 			setOptions();	
 		}
 	}
-	
+
+
+	/**
+	 * A listener that implements the ActionListener class and 
+	 * overrides the actionPerformed method to set the options
+	 * based on a user input.
+	 */
+	class FriendListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent event) 
+		{
+			//friend selection action
+		}
+	}
 	/**
 	 * A listener that implements the ActionListener class and 
 	 * overrides the actionPerformed method to exit the program
@@ -419,7 +436,51 @@ public class GUI extends JFrame
 		}
 		if(selection.equals("Messages"))
 		{
-			//
+			panel.removeAll();
+			JMenuBar menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+			menuBar.add(createFileMenu());
+			
+			friends = new JComboBox<String>();
+			friends.removeAllItems();
+			friends.removeActionListener(listener);
+
+			friends.addItem("");
+			friends.addItem("Adam");
+			friends.addItem("Bill");
+
+			friends.addActionListener(friend);
+			
+			// Construct menu
+			panel.setLayout(new BorderLayout());
+			getContentPane().add(panel);
+			
+			createTextField();
+			createTextArea();
+			createPanel();
+			//createControlPanel();
+			
+			getContentPane().add(panel);
+			//listener = new ChoiceListener();
+			
+			//inputPanel = new JPanel();
+			inputPanel.removeAll();
+			inputPanel.setLayout(new FlowLayout());
+			
+			inputPanel.add(Friends);
+			
+			textArea.setText("messages here");
+			outputPanel.add(textArea);
+			inputPanel.add(friends);
+			panel.add(inputPanel,BorderLayout.NORTH);
+			panel.add(outputPanel, BorderLayout.SOUTH);
+			
+			setSize(FRAME_WIDTH, FRAME_HEIGHT);
+			
+			panel.revalidate();
+			panel.updateUI();
+			panel.repaint();
+
 		}
 		outputPanel.repaint();
 	}
@@ -756,6 +817,7 @@ public class GUI extends JFrame
 		ConnectionSearchButton = new JButton("Submit");
 		ConnectionSearchButton.addActionListener(connectionSearchListener);
 		
+		Friends = new JLabel("Friends");
 		FriendRequestButton = new JButton("Friend Request");
 		FriendRequestButton.addActionListener(friendRequestListener);
 		
