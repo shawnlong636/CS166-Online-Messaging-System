@@ -702,6 +702,12 @@ public boolean sendMessage(String sender, String receiver, String message) {
    }
 }
 
+/** 
+ * This method deletes the last message sent between two users
+ * @param the sender of the message
+ * @param the receiver of the message
+ * @return returns true if the message was successfully deleted, false otherwise
+ */
 public boolean deleteLastMessage(String sender, String receiver) {
    try {
       if (this.userExists(sender) && this.userExists(receiver)) {
