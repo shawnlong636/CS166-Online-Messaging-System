@@ -9,7 +9,9 @@ public class CommandLineDriver {
     
     /**
     * The main execution method
-    *
+    * This is the main static execution method which takes the following command line arguments: `<dbname> <port> <user>`. 
+    * A ProfNetwork object *esql* is created in main which is the primary interface connecting to the database. 
+    * This object is passed to other methods to perform certain tasks. |
     * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
     */
    public static void main (String[] args) {
@@ -94,7 +96,10 @@ public class CommandLineDriver {
 
       in.close();
    }//end main
-
+   
+   /**
+   * This is a static method which prints out the Header for the App
+   */
    public static void Greeting(){
       System.out.println(
          "\n\n*******************************************************\n" +
@@ -103,6 +108,7 @@ public class CommandLineDriver {
    }//end Greeting
 
    /*
+    * This is a static method which uses the input scanner to receive input for navigating in the main switch statement.
     * Reads the users choice given from the keyboard
     * @int
     **/
@@ -122,7 +128,12 @@ public class CommandLineDriver {
       }while (true);
       return input;
    }//end readChoice
-
+   
+   /*
+    * This is a static method which takes in the ProfNetwork object from main, 
+    * gets user details from the client, and then uses the ProfNetwork object to 
+    * update the database with the new user record.
+    **/
    public static void CreateUser(ProfNetwork esql) {
 
     System.out.print("\tEnter user login: ");
@@ -135,8 +146,13 @@ public class CommandLineDriver {
       esql.CreateUser(login, password, email);
     
     }
-
-   public static String LogIn(ProfNetwork esql) {
+   
+   /*
+    * This is a static method which takes in the ProfNetwork object from main, 
+    * and prompts the user to enter a user and pass to authenticate and access their account. 
+    * Returns the username if succeeded, otherwise it returns an empty string.
+    **/
+  public static String LogIn(ProfNetwork esql) {
       System.out.print("\tEnter user login: ");
       String login = in.next();
       System.out.print("\tEnter user password: ");
@@ -152,8 +168,12 @@ public class CommandLineDriver {
          return "";
       }
    }
-
-   public static void FriendList(ProfNetwork esql, String username) {
+  /*
+   * This is a static method which takes in the ProfNetwork object from main as well 
+   * as the username of the current user. This method prints the list of friends for the given user, 
+   * using the ProfNetwork object.
+   **/
+ public static void FriendList(ProfNetwork esql, String username) {
       List<String> friends = esql.FriendList(username);
       if (friends.size() == 0) {
          System.out.println("\nYou haven't added any friends yet. Try sending them a request!\n");
@@ -167,7 +187,12 @@ public class CommandLineDriver {
       }
       
    }
-
+ 
+ /*
+  * This is a static method which takes in the ProfNetwork object from main as well as the 
+  * username of the current user. This method prompts user for their current password, 
+  * and asks twice for a new password before updating the database using the ProfNetwork object.
+  **/
    public static void ChangePassword(ProfNetwork esql, String username) {
       System.out.print("Please enter current password: ");
       String curr_password = in.next();
@@ -204,6 +229,11 @@ public class CommandLineDriver {
       System.out.println("Password Updated");
    }
 
+    /*
+     * This is a static method which takes in the ProfNetwork object from main as well 
+     * as the username of the current user. This method prompts for a user to send a friend 
+     * request to and then sends it if the person exists.
+     **/  
    public static void SendRequest(ProfNetwork esql, String username) {
       System.out.print("Please enter your friend's username: ");
       String recipient = in.next();
@@ -254,6 +284,12 @@ public class CommandLineDriver {
       esql.SendRequest(username, recipient);
 
    }
+   
+   /*
+    * This is a static method which takes in the ProfNetwork object from main as well 
+    * as the username of the current user. This method allows a user to view pending and 
+    * received friend requests.
+    **/  
    public static void viewRequests(ProfNetwork esql, String username) {
       List<String> requestedMe = esql.getRequested(username);
       List<String> imRequesting = esql.getRequesting(username);
@@ -274,7 +310,7 @@ public class CommandLineDriver {
             System.out.println("\t - " + user);
          }
       } else {
-         // Has Requsts and Requesting
+         // Has Requests and Requesting
          System.out.println("You have been sent the following pending requests: ");
          for (String user : requestedMe) {
             System.out.println("\t - " + user);
@@ -390,6 +426,11 @@ public class CommandLineDriver {
       System.out.println();
    }
 
+   /*
+    * This is a static method which takes in the ProfNetwork object from main as well 
+    * as a username. This method allows a user to view the profile of another existing
+    * user on the network.
+    **/  
    public static String ViewProfile(ProfNetwork esql, String username) {
       // VIEW PROFILE
       System.out.println("PROFILE: " + username);
@@ -455,6 +496,11 @@ public class CommandLineDriver {
       return username;
    }
 
+   /*
+    * This is a static method which takes in the ProfNetwork object from main as well 
+    * as a username. This method allows a user to view the profile of a user that is a 
+    * friend of the current user.
+    **/  
    public static void friendsProfiles(ProfNetwork esql, String username) {
       FriendList(esql, username);
       System.out.print("Enter your friend's name to view their profile: ");
@@ -487,6 +533,12 @@ public class CommandLineDriver {
       System.out.println("Birth Date: " + attributes.get(4));
       System.out.println();
    }
+   
+   /*
+    * This is a static method which takes in the ProfNetwork object from main as well 
+    * as a username. This method allows a user to search the profile of another existing
+    * user on the network.
+    **/  
    public static void searchProfiles(ProfNetwork esql, String username) {
       System.out.print("Enter a username: ");
       String response = in.next();

@@ -41,7 +41,8 @@ public class ProfNetwork {
 
    /**
     * Creates a new instance of ProfNetwork
-    *
+    * Constructor for the ProfNetwork class. Takes in database credentials as arguments. 
+    * By default, it connects to Postgres via *localhost*.
     * @param hostname the MySQL or PostgreSQL server hostname
     * @param database the name of the database
     * @param username the user name used to login to the database
@@ -67,8 +68,8 @@ public class ProfNetwork {
    }//end ProfNetwork
 
    /**
-    * Method to execute an update SQL statement.  Update SQL instructions
-    * includes CREATE, INSERT, UPDATE, DELETE, and DROP.
+    * Method to execute a SQL statement. 
+    * Update SQL instructions includes `CREATE`, `UPDATE`, `INSERT`, `DELETE`,  and`DROP`.
     *
     * @param sql the input SQL string
     * @throws java.sql.SQLException when update failed
@@ -220,10 +221,14 @@ public class ProfNetwork {
       }//end try
    }//end cleanup
 
-   /*
-    * Creates a new user with provided login, passowrd and email
+   /**
+    * Creates a new user with provided login, password and email
     * An empty block and contact list would be generated and associated with a user
-    **/
+    * @param the userID that will be used to login into the account
+    * @param the password that will be used to login into the account
+    * @param the email that will be associated with the account
+    * @return returns true if the the user account has been successfully created and false otherwise
+    */
    public boolean CreateUser(String login, String password, String email){
       try{
 
@@ -241,11 +246,13 @@ public class ProfNetwork {
       }
    }//end
 
-   /*
+   /**
     * Check log in credentials for an existing user
+    * @param the userID for the existing user account
+    * @param the password for the existing user account
     * @return true if login succeeded else false if 
     * the user/password doesn't exist in the database
-    **/
+    */
    public boolean LogIn(String login, String password){
       try{
          String query = String.format("SELECT * FROM USR WHERE userId = '%s' AND password = '%s'", login, password);
@@ -258,10 +265,11 @@ public class ProfNetwork {
 
 // Rest of the functions definition go in here
 
- /*
+   /**
     * Query the list of friends for the given user
+    * @param the user currently logged into the database
     * @return the list, or null if there are no friends
-    **/
+    */
 public List<String> FriendList(String user){
    try{
       String query = String.format("SELECT userA FROM FRIENDS WHERE userB = '%s'", user)
@@ -276,10 +284,13 @@ public List<String> FriendList(String user){
    }
 }
 
- /*
-    * This is is a simple function which performans an update
-    * on the user table. If the update fails, it returns false.
-    **/
+ 	/**
+    * This is is a simple function which checks if the user exists in the database, 
+    * and if so, updates the user with the specified password. 
+    * @param The current user logged into the database
+    * @param the password that the user wants to update their account with.
+    * @return true if the password change succeeds, otherwise false.
+    */
 public boolean ChangePassword(String user, String password){
    try{
 
@@ -294,10 +305,13 @@ public boolean ChangePassword(String user, String password){
    }
 }
 
-/*
-    * 
-    * TODO: WRITE DESCRIPTION
-    **/
+	/** 
+    * This method sends a message from the user to the recipient. 
+    * @param the current user logged into the database
+    * @param the user who the message will be sent to
+    * @param the message contained within a string
+    * @return true if message is sent, otherwise false.
+    */
 public boolean NewMessage(String user, String recipient, String message){
    try{
       // TODO: IMPLEMENT ME
@@ -310,10 +324,13 @@ public boolean NewMessage(String user, String recipient, String message){
    }
 }
 
-/*
-    * 
-    * TODO: WRITE DESCRIPTION
-    **/
+	/** 
+    * This method sends a friend request from the user to the requestedUser by 
+    * adding a record to the database if it doesn't already exist.
+    * @param the user who will be sending the request
+    * @param the requested user who will be recieving the request
+    * @return true if the request is sent, otherwise false.
+    */
 public boolean SendRequest(String user, String requestedUser){
    try{
 
@@ -344,16 +361,18 @@ public boolean SendRequest(String user, String requestedUser){
    }
 }
 
- /*
-    * This method checks if the two users can connect. The constraint
+ 	/** 
+ 	* This method checks if the two users can connect. The constraint
     * is that if the user has less than 5 friends, they can add anyone
     * but if they have 5 or more, they can only add someone with a
     * connection level of at most 3. This is done by running BFS
     * and getting the min distance between the two users. If a 
     * path of 3 or less exists between the two, the request can
     * be submitted.
-    * 
-    **/
+    * @param a user in the database
+    * @param another user in the database
+    * @return true if the users can connect with one another, false otherwise
+    */
 public boolean canConnect(String user1, String user2) {
    List<String> user1Friends = this.FriendList(user1);
    if (user1Friends.size() < 5) {
@@ -389,6 +408,11 @@ public boolean canConnect(String user1, String user2) {
    return !(value == null);
 }
 
+/** 
+ * This method checks if a user exists in the database.
+ * @param the user being checked in the database
+ * @return true if the user can be found, otherwise false.
+ */
 public boolean userExists(String user) {
    try{
       String query = String.format("SELECT * FROM USR WHERE userId = '%s'", user);
@@ -398,6 +422,13 @@ public boolean userExists(String user) {
       return false;
    }
 }
+
+/** 
+ * This method checks if two users are friends.
+ * @param a user in the database
+ * @param another user in the database
+ * @return true if the two users are friends, otherwise false.
+ */
 public boolean checkFriends(String user1, String user2) {
    try {
       String query = String.format("SELECT * FROM FRIENDS WHERE (userA = '%s' AND userB = '%s')", user1, user2)
@@ -411,6 +442,12 @@ public boolean checkFriends(String user1, String user2) {
    }
 }
 
+/** 
+ * This method checks if a friend request has been sent from user1 to user2
+ * @param a user in the database
+ * @param another user in the database
+ * @return true if there has been a friend request sent between the users, otherwise false.
+ */
 public boolean checkRequest(String user1, String user2) {
    try {
       String query = String.format("SELECT * FROM REQUESTS WHERE userId = '%s' AND connectionId = '%s';", user1, user2);
@@ -421,6 +458,11 @@ public boolean checkRequest(String user1, String user2) {
    }
 }
 
+/** 
+ * This method gets the friend requests that have been sent to the user.
+ * @param the user who is receiving the requests
+ * @return returns the list of requests (if any) that the user has received
+ */
 public List<String> getRequested(String username) {
    try{
       String requested = String.format("SELECT userId FROM REQUESTS WHERE connectionId = '%s';", username);
@@ -434,6 +476,11 @@ public List<String> getRequested(String username) {
    }
 }
 
+/** 
+ * This method gets the friend request that the user has sent out
+ * @param the user who is sending the requests
+ * @return returns the list of requests (if any) that the user has sent
+ */
 public List<String> getRequesting(String username) {
    try{
       String requested = String.format("SELECT connectionId FROM REQUESTS WHERE userId = '%s';", username);
@@ -447,6 +494,12 @@ public List<String> getRequesting(String username) {
    }
 }
 
+/** 
+ * This method allows a user to accept a friend request
+ * @param the user who is receiving the friend request
+ * @param the user who sent the friend request
+ * @return returns true if the friend request has been accepted, false otherwise
+ */
 public boolean acceptRequest(String username, String otherUser) {
    try {
       System.out.println("ACCEPTING REQUEST");
@@ -459,6 +512,12 @@ public boolean acceptRequest(String username, String otherUser) {
    }
 }
 
+/** 
+ * This method allows a user to deny a friend request
+ * @param the user who is receiving the friend request
+ * @param the user who sent the friend request
+ * @return returns true if the friend request has been denied, false otherwise
+ */
 public boolean denyRequest(String username, String otherUser) {
    try {
       if (this.checkRequest(otherUser, username)) {
@@ -473,6 +532,12 @@ public boolean denyRequest(String username, String otherUser) {
    }
 }
 
+/** 
+ * This method allows a user withdraw a sent friend request
+ * @param the user who is sending the friend request
+ * @param the user who is receiving the friend request
+ * @return returns true if the friend request has been withdrawn, false otherwise
+ */
 public boolean withdrawRequest(String username, String otherUser) {
    try {
       if (this.checkRequest(username, otherUser)) {
@@ -487,6 +552,12 @@ public boolean withdrawRequest(String username, String otherUser) {
       return false;
    }
 }
+
+/** 
+ * This method allows a user to get the profile of another user
+ * @param the user whose profile is being viewed
+ * @return returns the profile of the user being viewed
+ */
 public List<String> getProfile(String username) {
    try{
       String query = String.format("SELECT * FROM USR WHERE userId = '%s'", username);
@@ -499,6 +570,13 @@ public List<String> getProfile(String username) {
    }
 }
 
+/** 
+ * This method allows a user to update their profile information
+ * @param the user whose profile is being updated
+ * @param the attribute of the profile that will be modified
+ * @param the value of the attribute of the profile being modified
+ * @return returns true if the profile has been updated, false otherwise
+ */
 public boolean updateProfile(String username, String attribute, String value) {
    try {
       if (this.userExists(username)) {
@@ -513,6 +591,11 @@ public boolean updateProfile(String username, String attribute, String value) {
    }
 }
 
+/** 
+ * This method allows a user to search other people in the database
+ * @param the search term that is used to scan through the database
+ * @return returns the users in the database that have met the search criteria
+ */
 public List<String> searchPeople(String search_term) {
    try {
       String query = "SELECT userId FROM USR WHERE userId LIKE '%" + search_term + "%'"

@@ -69,9 +69,8 @@ public class GUI extends JFrame
 	private JPanel tasks;
 	private JMenuBar menuBar;
 	private String selection;
-	private JPanel userPanel;
 	private JButton FriendRequestButton;
-	
+
 	/**
 	Initializes all necessary variables needed to create the GUI
 	*/
@@ -291,12 +290,9 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			//createControlPanel();
 			
 			getContentPane().add(panel);
-			//listener = new ChoiceListener();
-			
-			//inputPanel = new JPanel();
+
 			inputPanel.removeAll();
 			inputPanel.setLayout(new GridLayout(0,2));
 			
@@ -334,12 +330,9 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			//createControlPanel();
 			
 			getContentPane().add(panel);
-			//listener = new ChoiceListener();
 			
-			//inputPanel = new JPanel();
 			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
@@ -368,12 +361,9 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			//createControlPanel();
 			
 			getContentPane().add(panel);
-			//listener = new ChoiceListener();
-			
-			//inputPanel = new JPanel();
+
 			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
@@ -410,12 +400,9 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			//createControlPanel();
 			
 			getContentPane().add(panel);
-			//listener = new ChoiceListener();
 			
-			//inputPanel = new JPanel();
 			inputPanel.removeAll();
 			inputPanel.setLayout(new FlowLayout());
 			
@@ -448,12 +435,11 @@ public class GUI extends JFrame
 		{
 			userData = new String[3];
 			panel.removeAll();
-			//JPanel tasks = createRadioButtons();
+
 			JMenuBar menuBar = new JMenuBar();
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -467,7 +453,6 @@ public class GUI extends JFrame
 			//inputPanel = new JPanel();
 			inputPanel.removeAll();
 			inputPanel.setBorder(new EtchedBorder());
-			//inputPanel.setLayout(new FlowLayout());
 			inputPanel.setLayout(new GridLayout(0,2));
 			
 			inputPanel.add(UserID);
@@ -493,7 +478,6 @@ public class GUI extends JFrame
 			textArea.setEditable(false);
 			createTextArea();
 			main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-			//panel.add(main, BorderLayout.CENTER);
 			panel.add(main,BorderLayout.NORTH);
 			main.setLeftComponent(inputPanel);
 			main.setRightComponent(outputPanel);
@@ -511,7 +495,6 @@ public class GUI extends JFrame
 			setJMenuBar(menuBar);
 			menuBar.add(createFileMenu());
 			
-			//listener = new ChoiceListener();
 			// Construct menu
 			panel = new JPanel();
 			panel.setLayout(new BorderLayout());
@@ -520,9 +503,7 @@ public class GUI extends JFrame
 			createTextField();
 			createTextArea();
 			createPanel();
-			//createControlPanel();
 			
-			//inputPanel = new JPanel();
 			inputPanel.removeAll();
 			inputPanel.setBorder(new EtchedBorder());
 			inputPanel.setLayout(new FlowLayout());
