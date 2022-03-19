@@ -71,7 +71,7 @@ public class GUI extends JFrame
 	private String selection;
 	private JPanel userPanel;
 	private JButton FriendRequestButton;
-	
+	//ProfNetwork object = new ProfNetwork("dbname", "dbport", "user", "pass");
 	/**
 	Initializes all necessary variables needed to create the GUI
 	*/
