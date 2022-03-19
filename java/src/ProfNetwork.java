@@ -678,4 +678,21 @@ public boolean sendMessage(String sender, String receiver, String message) {
    }
 }
 
+public boolean deleteLastMessage(String sender, String receiver) {
+   try {
+      if (this.userExists(sender) && this.userExists(receiver)) {
+         String insert = String.format("DELETE FROM MESSAGE WHERE senderId = '%s' AND receiverId = '%s' AND ", sender, receiver)
+                       + String.format("msgId IN (SELECT msgId FROM MESSAGE WHERE senderId = '%s' AND receiverId = '%s' ", sender, receiver)
+                       + String.format("ORDER BY msgId DESC LIMIT 1);");
+         System.out.println ("Message Deleted!");
+         this.executeUpdate(insert);
+         return true;
+      }
+      return false;
+   } catch (Exception e) {
+      System.err.println (e.getMessage ());
+      return false;
+   }
+}
+
 }//end ProfNetwork
