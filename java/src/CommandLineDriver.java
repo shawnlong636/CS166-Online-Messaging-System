@@ -649,7 +649,7 @@ public class CommandLineDriver {
 
    public static boolean displayThread(ProfNetwork esql, String username, String friendName) {
 
-      int MessageLimit = 5;
+      int MessageLimit = 10;
       
       // Temp variables
       String senderId;
@@ -671,7 +671,7 @@ public class CommandLineDriver {
                sendTime = thread.get(4 * i + 2);
                status = thread.get(4 * i + 3);
 
-               if (!printedUnreadMessage && !status.equals("Read") && senderId == friendName) {
+               if (!printedUnreadMessage && !status.equals("Read") && senderId.equals(friendName)) {
                   System.out.println("===== NEW MESSAGES BELOW =====");
                   printedUnreadMessage = true;
                }
